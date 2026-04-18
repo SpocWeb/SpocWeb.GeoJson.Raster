@@ -207,7 +207,7 @@ public sealed class GDalContext : IDisposable {
 			return CreateEmptyCounts(_histogram.BucketCount);
 		}
 
-		return Dataset.ComputePolygonHistogramCounts(Band, zoneInRasterCrs, _GeoTransformMatrix, _hasNoDataValue, _noDataValue, _histogram);
+		return Dataset.PolygonHistogramByCounts(Band, zoneInRasterCrs, _GeoTransformMatrix, _hasNoDataValue, _noDataValue, _histogram);
 	}
 
 	/// <summary>  

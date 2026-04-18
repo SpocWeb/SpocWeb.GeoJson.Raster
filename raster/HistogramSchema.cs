@@ -96,7 +96,7 @@ public static class HistogramSchemaFactory {
 		}
 
 		var bucketWidthM = (histogramMaxM - histogramMinM) / bucketCount;
-		List<HistogramBin> bins = new List<HistogramBin>(bucketCount);
+		var bins = new List<HistogramBin>(bucketCount);
 
 		var labelFormat = labelDecimalPlaces > 0
 			? "0." + new string('0', labelDecimalPlaces)
@@ -155,10 +155,10 @@ public static class HistogramSchemaFileWriter {
 			throw new ArgumentException("csvPath is required.", nameof(csvPath));
 		}
 
-		using (StreamWriter writer = new StreamWriter(csvPath, false)) {
+		using (var writer = new StreamWriter(csvPath, false)) {
 			writer.WriteLine("HistogramSchemaId,BinIndex,MinimumValueM,MaximumValueM,IntervalNotation,Label");
 
-			foreach (HistogramBin bin in schema.Bins) {
+			foreach (var bin in schema.Bins) {
 				writer.WriteLine(
 					EscapeCsv(schema.HistogramSchemaId) + "," +
 					bin.BinIndex.ToString(CultureInfo.InvariantCulture) + "," +
@@ -197,9 +197,25 @@ public static class HistogramSchemaFileWriter {
 	}
 }
 
-/// <summary>  
-/// Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory.  
-/// </summary>  
+/// <summary> feature result containing area totals per histogram bin. </summary>
+public sealed class AreaHistogramFeatureResult {
+
+	/// <summary> Gets or sets the area totals for each histogram bin in square meters. </summary>
+	public double[] BinAreasM2 { get; init; }
+
+	/// <summary> Gets or sets the total included area in square meters. </summary>
+	public double TotalAreaM2 { get; set; }
+
+	/// <summary> Creates an empty area-histogram result for a given bucket count. </summary>
+	public static AreaHistogramFeatureResult CreateEmpty(int bucketCount)
+		=> new() {
+			BinAreasM2 = new double[bucketCount],
+			TotalAreaM2 = 0.0
+		};
+}
+
+
+/// <summary> Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory. </summary>  
 public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 
 	public const string GeoJsonExtension = ".geoJson";
@@ -253,7 +269,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		//int effectiveMaxDegreeOfParallelism,
 		//int featureBatchSize
 		) {
-		FeatureCollection featureCollection = LoadFeatureCollection(inputGeoJsonPath);
+		var featureCollection = LoadFeatureCollection(inputGeoJsonPath);
 		if (featureCollection == null) {
 			throw new InvalidOperationException("Could not read FeatureCollection from GeoJSON.");
 		}
@@ -288,12 +304,12 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			//worker => worker.Dispose());
 
 		for (var index = 0; index < features.Length; index++) {
-			IFeature feature = features[index];
+			var feature = features[index];
 			if (feature == null) {
 				continue;
 			}
 
-			IAttributesTable attributes = GetOrCreateAttributes(feature);
+			var attributes = GetOrCreateAttributes(feature);
 			var counts = results[index] ?? new long[schema.BucketCount];
 
 			SetAttribute(attributes, "hist_schema_id", schema.HistogramSchemaId);
@@ -352,8 +368,8 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 
 	/// <summary> Collects DEM tile paths from a directory. </summary> 
 	private static string[] CollectDemTilePaths(string demDirectory, bool recursive) {
-		SearchOption searchOption = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-		List<string> result = new List<string>();
+		var searchOption = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+		var result = new List<string>();
 		result.AddRange(Directory.GetFiles(demDirectory, "*.tif", searchOption));
 		result.AddRange(Directory.GetFiles(demDirectory, "*.tiff", searchOption));
 		result.Sort(StringComparer.OrdinalIgnoreCase);
@@ -371,7 +387,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			"-input_file_list " + QuoteArgument(listPath) + " " +
 			QuoteArgument(vrtPath);
 
-		ProcessStartInfo startInfo = new ProcessStartInfo {
+		var startInfo = new ProcessStartInfo {
 			FileName = gdalBuildVrtExePath,
 			Arguments = arguments,
 			UseShellExecute = false,
@@ -381,7 +397,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			WorkingDirectory = Path.GetDirectoryName(vrtPath)
 		};
 
-		using (Process process = new Process()) {
+		using (var process = new Process()) {
 			process.StartInfo = startInfo;
 			process.Start();
 
@@ -420,8 +436,8 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	/// <summary> Loads a GeoJSON feature collection from disk. </summary> 
 	private static FeatureCollection LoadFeatureCollection(FileInfo path) {
 		var serializer = GeoJsonSerializer.Create();
-		using (StreamReader textReader = new StreamReader(path.FullName))
-		using (JsonTextReader jsonReader = new JsonTextReader(textReader)) {
+		using (var textReader = new StreamReader(path.FullName))
+		using (var jsonReader = new JsonTextReader(textReader)) {
 			return serializer.Deserialize<FeatureCollection>(jsonReader);
 		}
 	}
@@ -429,8 +445,8 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	/// <summary> Saves a GeoJSON feature collection to disk. </summary> 
 	private static void SaveFeatureCollection(FeatureCollection featureCollection, string path) {
 		var serializer = GeoJsonSerializer.Create();
-		using (StreamWriter textWriter = new StreamWriter(path))
-		using (JsonTextWriter jsonWriter = new JsonTextWriter(textWriter)) {
+		using (var textWriter = new StreamWriter(path))
+		using (var jsonWriter = new JsonTextWriter(textWriter)) {
 			jsonWriter.Formatting = Formatting.Indented;
 			serializer.Serialize(jsonWriter, featureCollection);
 		}
@@ -473,14 +489,14 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 
 	/// <summary> Transforms a polygonal geometry into the raster coordinate reference system. </summary> 
 	public static Geometry TransformPolygonalGeometry(this Geometry geometry, CoordinateTransformation transform) {
-		GeometryFactory geometryFactory = geometry.Factory;
+		var geometryFactory = geometry.Factory;
 
 		if (geometry is Polygon polygon) {
 			return polygon.TransformPolygon( transform, geometryFactory);
 		}
 
 		if (geometry is MultiPolygon multiPolygon) {
-			Polygon[] polygons = new Polygon[multiPolygon.NumGeometries];
+			var polygons = new Polygon[multiPolygon.NumGeometries];
 			for (var i = 0; i < multiPolygon.NumGeometries; i++) {
 				polygons[i] = ((Polygon) multiPolygon.GetGeometryN(i)).TransformPolygon( transform, geometryFactory);
 			}
@@ -492,9 +508,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 
 	/// <summary> Transforms one polygon into the raster coordinate reference system. </summary> 
 	public static Polygon TransformPolygon(this Polygon polygon, CoordinateTransformation transform, GeometryFactory geometryFactory) {
-		LinearRing shell = TransformLinearRing((LinearRing) polygon.ExteriorRing, transform, geometryFactory);
+		var shell = TransformLinearRing((LinearRing) polygon.ExteriorRing, transform, geometryFactory);
 
-		LinearRing[] holes = new LinearRing[polygon.NumInteriorRings];
+		var holes = new LinearRing[polygon.NumInteriorRings];
 		for (var i = 0; i < polygon.NumInteriorRings; i++) {
 			holes[i] = TransformLinearRing((LinearRing) polygon.GetInteriorRingN(i), transform, geometryFactory);
 		}
@@ -502,15 +518,18 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		return geometryFactory.CreatePolygon(shell, holes);
 	}
 
+	[ThreadStatic]
+	static double[]? _Point;
+
 	/// <summary> Transforms one linear ring into the raster coordinate reference system. </summary> 
 	private static LinearRing TransformLinearRing(LinearRing ring, CoordinateTransformation transform, GeometryFactory geometryFactory) {
 		Coordinate[] source = ring.Coordinates;
-		Coordinate[] target = new Coordinate[source.Length];
-		var point = new double[2];
+		var target = new Coordinate[source.Length];
+		_Point ??= new double[2];
 		for (var i = 0; i < source.Length; i++) {
-			source[i].ToArray(point);
-			transform.TransformPoint(point);
-			target[i] = new CoordinateZ(point[0], point[1], source[i].Z);
+			source[i].ToArray(_Point);
+			transform.TransformPoint(_Point);
+			target[i] = new CoordinateZ(_Point[0], _Point[1], source[i].Z);
 		}
 
 		return geometryFactory.CreateLinearRing(target);
@@ -535,22 +554,116 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 				return;
 			}
 
-			Type enumType = method.GetParameters()[0].ParameterType;
+			var enumType = method.GetParameters()[0].ParameterType;
 			var enumValue = Enum.Parse(enumType, "OAMS_TRADITIONAL_GIS_ORDER");
 			method.Invoke(spatialReference, new [] { enumValue });
 		} catch {
 		}
 	}
 
+
+	private const double RadPerDegree = Math.PI / 180.0;
+
+	/// <summary> geographic ground area of one raster cell row element in rad². </summary>  
+	private static double ComputeGeographicPixelArea(
+		double pixelWidthDegrees,
+		double northEdgeLatitudeDegrees,
+		double southEdgeLatitudeDegrees) {
+		var northLatitudeRadians = ClampLatitudeDegrees(northEdgeLatitudeDegrees) * RadPerDegree;
+		var southLatitudeRadians = ClampLatitudeDegrees(southEdgeLatitudeDegrees) * RadPerDegree;
+
+		var deltaLongitudeRadians = pixelWidthDegrees * RadPerDegree;
+		var areaM2 = deltaLongitudeRadians * (Math.Sin(northLatitudeRadians) - Math.Sin(southLatitudeRadians));
+		return Math.Abs(areaM2);
+	}
+
+	/// <summary> Clamps a latitude value into the valid geographic range. </summary>  
+	public static double ClampLatitudeDegrees(double latitudeDegrees) =>
+		latitudeDegrees > 90.0 ? 90.0 :
+		latitudeDegrees < -90.0 ? -90.0 : latitudeDegrees;
+
+	/// <summary> Computes the area-weighted histogram for a polygon in raster coordinates. </summary>  
+	private static double[] PolygonHistogramByArea(this Dataset dem, Band band, Geometry polygonInRasterCrs
+		, double[] geoTransform, bool hasNoDataValue, double noDataValue, HistogramSchema schema) {
+		var result = new double[schema.BucketCount];
+
+		var envelope = polygonInRasterCrs.EnvelopeInternal;
+		var pixelWidth = geoTransform[1];
+		var pixelHeightAbs = Math.Abs(geoTransform[5]);
+
+		var rasterWidth = dem.RasterXSize;
+		var rasterHeight = dem.RasterYSize;
+
+		var xOff = Math.Max(0, (int) Math.Floor((envelope.MinX - geoTransform[0]) / pixelWidth));
+		var xEnd = Math.Min(rasterWidth, (int) Math.Ceiling((envelope.MaxX - geoTransform[0]) / pixelWidth));
+
+		var yOff = Math.Max(0, (int) Math.Floor((geoTransform[3] - envelope.MaxY) / pixelHeightAbs));
+		var yEnd = Math.Min(rasterHeight, (int) Math.Ceiling((geoTransform[3] - envelope.MinY) / pixelHeightAbs));
+
+		var windowWidth = xEnd - xOff;
+		var windowHeight = yEnd - yOff;
+
+		if (windowWidth <= 0 || windowHeight <= 0) {
+			return result;
+		}
+
+		var values = new double[windowWidth * windowHeight];
+		band.ReadRaster(xOff, yOff, windowWidth, windowHeight, values, windowWidth, windowHeight, 0, 0);
+
+		var locator = new IndexedPointInAreaLocator(polygonInRasterCrs);
+		var histogramMinM = schema.MinimumValueM;
+		var histogramMaxM = schema.MaximumValueM;
+		var bucketWidthM = schema.BucketWidthM;
+		var bucketCount = schema.BucketCount;
+
+		for (var row = 0; row < windowHeight; row++) {
+			var absoluteRowIndex = yOff + row;
+			var northEdgeLatitudeDegrees = geoTransform[3] + (absoluteRowIndex * geoTransform[5]);
+			var southEdgeLatitudeDegrees = geoTransform[3] + ((absoluteRowIndex + 1) * geoTransform[5]);
+			var pixelArea = ComputeGeographicPixelArea(pixelWidth, northEdgeLatitudeDegrees, southEdgeLatitudeDegrees);
+			var centerY = geoTransform[3] + ((absoluteRowIndex + 0.5) * geoTransform[5]);
+			var rowStart = row * windowWidth;
+
+			for (var col = 0; col < windowWidth; col++) {
+				var value = values[rowStart + col];
+				if (IsNoData(value, hasNoDataValue, noDataValue)) {
+					continue;
+				}
+
+				var centerX = geoTransform[0] + ((xOff + col + 0.5) * geoTransform[1]);
+				var location = locator.Locate(new Coordinate(centerX, centerY));
+				if (location == Location.Exterior) {
+					continue;
+				}
+
+				int bucketIndex;
+				if (value < histogramMinM) {
+					bucketIndex = 0;
+				} else if (value > histogramMaxM) {
+					bucketIndex = bucketCount - 1;
+				} else if (value == histogramMaxM) {
+					bucketIndex = bucketCount - 1;
+				} else {
+					bucketIndex = (int) Math.Floor((value - histogramMinM) / bucketWidthM);
+					if (bucketIndex < 0) {
+						bucketIndex = 0;
+					}
+					if (bucketIndex >= bucketCount) {
+						bucketIndex = bucketCount - 1;
+					}
+				}
+				result[bucketIndex] += pixelArea;
+			}
+		}
+		return result;
+	}
+
 	/// <summary> Computes one compact histogram-count array for a polygon in raster coordinates. </summary> 
-	public static long[] ComputePolygonHistogramCounts(this Dataset dem, Band band, Geometry polygonInRasterCrs,
-		double[] geoTransform,
-		bool hasNoDataValue,
-		double noDataValue,
-		HistogramSchema schema) {
+	public static long[] PolygonHistogramByCounts(this Dataset dem, Band band, Geometry polygonInRasterCrs
+		, double[] geoTransform, bool hasNoDataValue, double noDataValue, HistogramSchema schema) {
 		var counts = new long[schema.BucketCount];
 
-		Envelope envelope = polygonInRasterCrs.EnvelopeInternal;
+		var envelope = polygonInRasterCrs.EnvelopeInternal;
 		var pixelWidth = geoTransform[1];
 		var pixelHeightAbs = Math.Abs(geoTransform[5]);
 
@@ -573,7 +686,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		var values = new double[windowWidth * windowHeight];
 		band.ReadRaster(xOff, yOff, windowWidth, windowHeight, values, windowWidth, windowHeight, 0, 0);
 
-		IndexedPointInAreaLocator locator = new IndexedPointInAreaLocator(polygonInRasterCrs);
+		var locator = new IndexedPointInAreaLocator(polygonInRasterCrs);
 		var bucketWidthM = schema.BucketWidthM;
 		var histogramMinM = schema.MinimumValueM;
 		var histogramMaxM = schema.MaximumValueM;
@@ -590,7 +703,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 				}
 
 				var centerX = geoTransform[0] + ((xOff + col + 0.5) * geoTransform[1]);
-				Location location = locator.Locate(new Coordinate(centerX, centerY));
+				var location = locator.Locate(new Coordinate(centerX, centerY));
 				if (location == Location.Exterior) {
 					continue;
 				}
