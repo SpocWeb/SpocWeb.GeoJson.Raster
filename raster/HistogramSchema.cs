@@ -583,9 +583,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		latitudeDegrees < -90.0 ? -90.0 : latitudeDegrees;
 
 	/// <summary> Computes the area-weighted histogram for a polygon in raster coordinates. </summary>  
-	private static double[] PolygonHistogramByArea(this Dataset dem, Band band, Geometry polygonInRasterCrs
+	public static double[] PolygonHistogramByArea(this Dataset dem, Band band, Geometry polygonInRasterCrs
 		, double[] geoTransform, bool hasNoDataValue, double noDataValue, HistogramSchema schema) {
-		var result = new double[schema.BucketCount];
+		var areas = new double[schema.BucketCount];
 
 		var envelope = polygonInRasterCrs.EnvelopeInternal;
 		var pixelWidth = geoTransform[1];
@@ -604,7 +604,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		var windowHeight = yEnd - yOff;
 
 		if (windowWidth <= 0 || windowHeight <= 0) {
-			return result;
+			return areas;
 		}
 
 		var values = new double[windowWidth * windowHeight];
@@ -629,33 +629,23 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 				if (IsNoData(value, hasNoDataValue, noDataValue)) {
 					continue;
 				}
-
 				var centerX = geoTransform[0] + ((xOff + col + 0.5) * geoTransform[1]);
 				var location = locator.Locate(new Coordinate(centerX, centerY));
 				if (location == Location.Exterior) {
 					continue;
 				}
-
 				int bucketIndex;
 				if (value < histogramMinM) {
 					bucketIndex = 0;
-				} else if (value > histogramMaxM) {
-					bucketIndex = bucketCount - 1;
-				} else if (value == histogramMaxM) {
+				} else if (value >= histogramMaxM) {
 					bucketIndex = bucketCount - 1;
 				} else {
 					bucketIndex = (int) Math.Floor((value - histogramMinM) / bucketWidthM);
-					if (bucketIndex < 0) {
-						bucketIndex = 0;
-					}
-					if (bucketIndex >= bucketCount) {
-						bucketIndex = bucketCount - 1;
-					}
 				}
-				result[bucketIndex] += pixelArea;
+				areas[bucketIndex] += pixelArea; //aggregate the areas
 			}
 		}
-		return result;
+		return areas;
 	}
 
 	/// <summary> Computes one compact histogram-count array for a polygon in raster coordinates. </summary> 
@@ -709,29 +699,16 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 				}
 
 				int bucketIndex;
-
 				if (value < histogramMinM) {
 					bucketIndex = 0;
-				} else if (value > histogramMaxM) {
-					bucketIndex = bucketCount - 1;
-				} else if (value == histogramMaxM) {
+				} else if (value >= histogramMaxM) {
 					bucketIndex = bucketCount - 1;
 				} else {
 					bucketIndex = (int) Math.Floor((value - histogramMinM) / bucketWidthM);
-
-					if (bucketIndex < 0) {
-						bucketIndex = 0;
-					}
-
-					if (bucketIndex >= bucketCount) {
-						bucketIndex = bucketCount - 1;
-					}
 				}
-
 				counts[bucketIndex]++;
 			}
 		}
-
 		return counts;
 	}
 }
