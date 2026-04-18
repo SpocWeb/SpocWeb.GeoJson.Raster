@@ -151,9 +151,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	public const string GeoJsonExtension = ".geoJson";
 	public const string GeoJsonPattern = "*" + GeoJsonExtension;
 
-	/// <summary> 
-	/// Uses an existing VRT and writes compact histograms into the output GeoJSON in parallel.  
-	/// </summary> 
+	/// <summary> Uses an existing VRT and writes compact histograms into the output GeoJSON </summary> 
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
@@ -166,15 +164,15 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			Trace.WriteLine(geoJsonFile.FullName);
 			Debug.WriteLine(geoJsonFile.FullName);
 			Console.WriteLine(geoJsonFile.FullName);
-			var outputPath = geoJsonFile.FullName
-				.Substring(0, geoJsonFile.FullName.Length - GeoJsonExtension.Length) + "Z" + GeoJsonExtension;
+			var outputPath = new FileInfo(geoJsonFile.FullName
+				.Substring(0, geoJsonFile.FullName.Length - GeoJsonExtension.Length) + "Z" + GeoJsonExtension);
 			gDal.ProcessGeoJsonAgainstRasterParallel(histogram,
 				vrtElevationFile,
 				geoJsonFile,
 				outputPath,
 				geoJsonEpsg); //, ResolveMaxDegreeOfParallelism(maxDegreeOfParallelism), featureBatchSize);
 			geoJsonFile.Delete();
-			File.Move(outputPath, geoJsonFile.FullName);
+			outputPath.MoveTo(geoJsonFile);
 		}
 	}
 
@@ -190,52 +188,41 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	}
 
 	/// <summary> Loads the GeoJSON, computes histogram counts in parallel, and writes the compact output file. </summary> 
-	private static void ProcessGeoJsonAgainstRasterParallel(this GDalContext gDal
+	public static void ProcessGeoJsonAgainstRasterParallel(this GDalContext gDal
 		, HistogramSchema schema,
 		string rasterPath,
 		FileInfo inputGeoJsonPath,
-		string outputGeoJsonPath,
+		FileInfo outputGeoJsonPath,
 		Epsg geoJsonEpsg = Epsg.Wgs84
 		//int effectiveMaxDegreeOfParallelism,
 		//int featureBatchSize
 		) {
-		var featureCollection = LoadFeatureCollection(inputGeoJsonPath);
+		var featureCollection = inputGeoJsonPath.GeoJsonDeserialize<Feature>();
 		if (featureCollection == null) {
 			throw new InvalidOperationException("Could not read FeatureCollection from GeoJSON.");
 		}
-
-		IFeature[] features = featureCollection.ToArray();
+		IFeature[] features = [featureCollection]; //.ToArray();
 		var results = new long[features.Length][];
-
 		if (features.Length == 0) {
-			SaveFeatureCollection(featureCollection, outputGeoJsonPath);
+			outputGeoJsonPath.GeoJsonSerialize(featureCollection, 0);
 			return;
 		}
-
 		features.ForEach((f,i) => results[i] = gDal.GetHistogram(f));
 
-		//ParallelOptions options = new ParallelOptions {
-		//	MaxDegreeOfParallelism = effectiveMaxDegreeOfParallelism
-		//};
-
+		//ParallelOptions options = new ParallelOptions { MaxDegreeOfParallelism = effectiveMaxDegreeOfParallelism };
 		//var partitions = Partitioner.Create(0, features.Length, featureBatchSize);
-
-		//Parallel.ForEach(
-		//	partitions,
-		//	options,
-		//	() =>
+		//Parallel.ForEach(partitions, options, () =>
 		//(range, loopState, worker) => {
 				//for (int index = range.Item1; index < range.Item2; index++) {
 				//	results[index] = worker.GetHistogram(features[index]);
 				//}
-
 			//	return worker;
 			//},
 			//worker => worker.Dispose());
 
 		for (var index = 0; index < features.Length; index++) {
 			var feature = features[index];
-			if (feature == null) {
+			if (feature is null) {
 				continue;
 			}
 
@@ -246,7 +233,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			SetAttribute(attributes, "elev_hist_counts", counts);
 		}
 
-		SaveFeatureCollection(featureCollection, outputGeoJsonPath);
+		outputGeoJsonPath.GeoJsonSerialize(featureCollection, 0);
 	}
 
 	/// <summary> Validates that the histogram schema is internally consistent. </summary> 
@@ -359,26 +346,8 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			if (!string.IsNullOrWhiteSpace(path) && File.Exists(path)) {
 				File.Delete(path);
 			}
-		} catch {
-		}
-	}
-
-	/// <summary> Loads a GeoJSON feature collection from disk. </summary> 
-	private static FeatureCollection LoadFeatureCollection(FileInfo path) {
-		var serializer = GeoJsonSerializer.Create();
-		using (var textReader = new StreamReader(path.FullName))
-		using (var jsonReader = new JsonTextReader(textReader)) {
-			return serializer.Deserialize<FeatureCollection>(jsonReader);
-		}
-	}
-
-	/// <summary> Saves a GeoJSON feature collection to disk. </summary> 
-	private static void SaveFeatureCollection(FeatureCollection featureCollection, string path) {
-		var serializer = GeoJsonSerializer.Create();
-		using (var textWriter = new StreamWriter(path))
-		using (var jsonWriter = new JsonTextWriter(textWriter)) {
-			jsonWriter.Formatting = Formatting.Indented;
-			serializer.Serialize(jsonWriter, featureCollection);
+		} catch (Exception x) {
+			Trace.TraceError("Failed to delete File " + path + "\n" + x);
 		}
 	}
 
@@ -387,11 +356,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		if (feature == null) {
 			throw new InvalidOperationException("Feature is null.");
 		}
-
 		if (feature.Attributes == null) {
 			feature.Attributes = new AttributesTable();
 		}
-
 		return feature.Attributes;
 	}
 
@@ -680,6 +647,5 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		var json = JsonConvert.SerializeObject(schema, Formatting.Indented);
 		File.WriteAllText(jsonPath, json);
 	}
-
 }
 

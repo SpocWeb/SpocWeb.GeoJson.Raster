@@ -82,9 +82,9 @@ public static class GeoJsonProcessor {
 				break;
 			}
 			default: {
-				var geom = ReadGeomJson(root.ToString(Formatting.None));
+				var geom = GeoJsonDeserialize<Geometry>(root.ToString(Formatting.None));
 				var geomZ = elevationModel.AddElevationAsZ(geom);
-				writer.Write(geomZ.WriteGeomJson());
+				writer.Write(geomZ.GeoJsonSerialize());
 				break;
 			}
 		}
@@ -94,31 +94,58 @@ public static class GeoJsonProcessor {
 		var geometryElement = feature["geometry"];
 		var geomZ = geometryElement == null || geometryElement.Type == JTokenType.Null
 			? null
-			: elevationModel.AddElevationAsZ(ReadGeomJson(geometryElement.ToString(Formatting.None)));
-		var geomJson = geomZ == null ? "null" : geomZ.WriteGeomJson();
+			: elevationModel.AddElevationAsZ(GeoJsonDeserialize<Geometry>(geometryElement.ToString(Formatting.None)));
+		var geomJson = geomZ == null ? "null" : geomZ.GeoJsonSerialize();
 		geomJson = geomJson.Replace("]],[[", "]],\n[[");
 		var propertiesJson = feature["properties"]?.ToString(Formatting.None) ?? "null";
 		return $"{{\"type\":\"Feature\",\"properties\":{propertiesJson},\n\"geometry\":{geomJson}}}";
 	}
 
-	static readonly JsonSerializer GeoJsonSerializer3D =
-		GeoJsonSerializer.Create(SerializerSettings, GeometryZ.GeometryFactory, 3);
+	public static readonly JsonSerializer GeoJsonSerializer3D
+		= GeoJsonSerializer.Create(SerializerSettings, GeometryZ.GeometryFactory, 3);
 
-	public static Geometry ReadGeomJson(string json) {
-		using var sr = new StringReader(json);
+	public static T GeoJsonDeserialize<T>(string json) {
+		using TextReader sr = new StringReader(json);
+		return GeoJsonDeserialize<T>(sr);
+	}
+
+	public static T GeoJsonDeserialize<T>(this FileInfo geoJsonPath) {
+		using var sr = new StreamReader(geoJsonPath.FullName);
+		return GeoJsonDeserialize<T>(sr);
+	}
+
+	public static T GeoJsonDeserialize<T>(this TextReader sr) {
 		using var jr = new JsonTextReader(sr);
-		return GeoJsonSerializer3D.Deserialize<Geometry>(jr)!;
+		return GeoJsonDeserialize<T>(jr);
 	}
 
-	public static string WriteGeomJson(this Geometry geom, int indentation = 0, string newLine = "\n") {
-		var sb = new StringBuilder();
-		var writer = sb.CreateJsonWriter(indentation, newLine);
-		GeoJsonSerializer3D.Serialize(writer, geom);
-		return sb.ToString();
+	public static T GeoJsonDeserialize<T>(this JsonTextReader jr) => GeoJsonSerializer3D.Deserialize<T>(jr)!;
+
+	public static string GeoJsonSerialize(this Geometry geoJson, int indentation = 2, string newLine = "\n")
+		=> new StringBuilder().GeoJsonSerialize(geoJson, indentation, newLine).ToString();
+
+	public static StringBuilder GeoJsonSerialize(this StringBuilder sb, object geoJson, int indentation = 2, string newLine = "\n") {
+		using var writer = sb.CreateJsonWriter(indentation, newLine);
+		GeoJsonSerializer3D.Serialize(writer, geoJson);
+		return sb;
 	}
 
-	public static JsonTextWriter CreateJsonWriter(this StringBuilder sb, int indentation = 0, string newLine = "\n")
-		=> new JsonTextWriter(new StringWriter(sb) { NewLine = "", }) {
+	public static void GeoJsonSerialize(this FileInfo geoJsonPath, object geoJson, int indentation = 2, string newLine = "\n") {
+		using var sw = new StreamWriter(geoJsonPath.FullName) { NewLine = newLine };
+		GeoJsonSerialize(sw, geoJson, indentation);
+	}
+
+	public static void GeoJsonSerialize(this TextWriter writer, object geoJson, int indentation = 2) {
+		using var jsonWriter = writer.CreateJsonWriter(indentation);
+		GeoJsonSerializer3D.Serialize(jsonWriter, geoJson);
+	}
+
+	public static JsonTextWriter CreateJsonWriter(this StringBuilder sb, int indentation = 2, string newLine = "\n")
+		=> new StringWriter(sb) { NewLine = newLine, }.CreateJsonWriter(indentation);
+
+
+	public static JsonTextWriter CreateJsonWriter(this TextWriter sb, int indentation = 2)
+		=> new JsonTextWriter(sb) {
 			Formatting = Formatting.Indented,
 			Indentation = indentation
 		};
