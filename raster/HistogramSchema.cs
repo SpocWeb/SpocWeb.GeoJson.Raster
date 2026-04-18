@@ -1,4 +1,6 @@
-﻿namespace org.SpocWeb.root.files.Tests.raster;
+﻿using org.SpocWeb.root.db.stream.ado;
+
+namespace org.SpocWeb.root.files.Tests.raster;
 
 using NetTopologySuite.Algorithm.Locate;
 using NetTopologySuite.Features;
@@ -143,78 +145,6 @@ public static class HistogramSchemaFactory {
 	}
 }
 
-public static class HistogramSchemaFileWriter {
-
-	/// <summary> Writes the <paramref name="schema"/> to the <paramref name="csvPath"/> </summary>
-	public static void WriteCsv(this HistogramSchema schema, string csvPath) {
-		if (schema == null) {
-			throw new ArgumentNullException(nameof(schema));
-		}
-
-		if (string.IsNullOrWhiteSpace(csvPath)) {
-			throw new ArgumentException("csvPath is required.", nameof(csvPath));
-		}
-
-		using (var writer = new StreamWriter(csvPath, false)) {
-			writer.WriteLine("HistogramSchemaId,BinIndex,MinimumValueM,MaximumValueM,IntervalNotation,Label");
-
-			foreach (var bin in schema.Bins) {
-				writer.WriteLine(
-					EscapeCsv(schema.HistogramSchemaId) + "," +
-					bin.BinIndex.ToString(CultureInfo.InvariantCulture) + "," +
-					bin.MinimumValueM.ToString("0.###############", CultureInfo.InvariantCulture) + "," +
-					bin.MaximumValueM.ToString("0.###############", CultureInfo.InvariantCulture) + "," +
-					EscapeCsv(bin.IntervalNotation) + "," +
-					EscapeCsv(bin.Label));
-			}
-		}
-	}
-
-	/// <summary> Writes the <paramref name="schema"/> to the <paramref name="jsonPath"/> </summary>
-	public static void WriteJson(HistogramSchema schema, string jsonPath) {
-		if (schema == null) {
-			throw new ArgumentNullException(nameof(schema));
-		}
-
-		if (string.IsNullOrWhiteSpace(jsonPath)) {
-			throw new ArgumentException("jsonPath is required.", nameof(jsonPath));
-		}
-
-		var json = JsonConvert.SerializeObject(schema, Formatting.Indented);
-		File.WriteAllText(jsonPath, json);
-	}
-
-	/// <summary> Escapes the <paramref name="text"/> for safe CSV output. </summary>  
-	public static string EscapeCsv(string text) {
-		if (text == null) {
-			return string.Empty;
-		}
-		var requiresQuotes = text.Contains(",") || text.Contains("\"") || text.Contains("\r") || text.Contains("\n");
-		if (!requiresQuotes) {
-			return text;
-		}
-		return "\"" + text.Replace("\"", "\"\"") + "\"";
-	}
-}
-
-/// <summary> feature result containing area totals per histogram bin. </summary>
-public sealed class AreaHistogramFeatureResult {
-
-	/// <summary> Gets or sets the area totals for each histogram bin in square meters. </summary>
-	public double[] BinAreasM2 { get; init; }
-
-	/// <summary> Gets or sets the total included area in square meters. </summary>
-	public double TotalAreaM2 { get; set; }
-
-	/// <summary> Creates an empty area-histogram result for a given bucket count. </summary>
-	public static AreaHistogramFeatureResult CreateEmpty(int bucketCount)
-		=> new() {
-			BinAreasM2 = new double[bucketCount],
-			TotalAreaM2 = 0.0
-		};
-}
-
-
 /// <summary> Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory. </summary>  
 public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 
@@ -248,7 +178,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		}
 	}
 
-	/// <summary> Creates the raster extent envelope from the dataset dimensions and geotransform. </summary>  
+	/// <summary> Creates the raster extent envelope from the dataset dimensions and geoTransform. </summary>  
 	public static Envelope CreateRasterExtentEnvelope(this Dataset dataset, double[]? geoTransform = null) {
 		geoTransform ??= new double[6];
 		dataset.GetGeoTransform(geoTransform);
@@ -711,4 +641,45 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		}
 		return counts;
 	}
+
+	/// <summary> Writes the <paramref name="schema"/> to the <paramref name="csvPath"/> </summary>
+	public static void WriteCsv(this HistogramSchema schema, string csvPath) {
+		if (schema == null) {
+			throw new ArgumentNullException(nameof(schema));
+		}
+
+		if (string.IsNullOrWhiteSpace(csvPath)) {
+			throw new ArgumentException("csvPath is required.", nameof(csvPath));
+		}
+
+		using (var writer = new StreamWriter(csvPath, false)) {
+			writer.WriteLine("HistogramSchemaId,BinIndex,MinimumValueM,MaximumValueM,IntervalNotation,Label");
+
+			foreach (var bin in schema.Bins) {
+				writer.WriteLine(
+					Csv.Escaped(schema.HistogramSchemaId) + "," +
+					bin.BinIndex.ToString(CultureInfo.InvariantCulture) + "," +
+					bin.MinimumValueM.ToString("0.###############", CultureInfo.InvariantCulture) + "," +
+					bin.MaximumValueM.ToString("0.###############", CultureInfo.InvariantCulture) + "," +
+					Csv.Escaped(bin.IntervalNotation) + "," +
+					Csv.Escaped(bin.Label));
+			}
+		}
+	}
+
+	/// <summary> Writes the <paramref name="schema"/> to the <paramref name="jsonPath"/> </summary>
+	public static void WriteJson(HistogramSchema schema, string jsonPath) {
+		if (schema == null) {
+			throw new ArgumentNullException(nameof(schema));
+		}
+
+		if (string.IsNullOrWhiteSpace(jsonPath)) {
+			throw new ArgumentException("jsonPath is required.", nameof(jsonPath));
+		}
+
+		var json = JsonConvert.SerializeObject(schema, Formatting.Indented);
+		File.WriteAllText(jsonPath, json);
+	}
+
 }
+
