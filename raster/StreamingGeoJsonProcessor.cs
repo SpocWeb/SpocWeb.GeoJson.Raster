@@ -10,7 +10,7 @@ public static class StreamingGeoJsonProcessor {
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\SpocWeb\_Standards\Earth\Continent\Europe\Europe~Central\Germany\Germany~West\Hessen\counties~Hessen")]
 	public static void StreamGeoJsonProcessor(string vrtPath, string geoJsonPath) {
 		var gf = new GeometryFactory();
-		using var elevationModel = new ElevationModelSampler(vrtPath);
+		using var elevationModel = new GDalContext(vrtPath, new HistogramSchema());
 		foreach (var geoJsonFile in Directory.EnumerateFiles(geoJsonPath, "*.geoJson", SearchOption.AllDirectories)) {
 			elevationModel.ProcessFile(geoJsonFile, geoJsonFile + ".json"); //ca. 46000 geojson Files down to province Level
 		}
@@ -25,7 +25,7 @@ public static class StreamingGeoJsonProcessor {
 		}
 	}
 
-	public static void ProcessFile(this ElevationModelSampler elevationModel, string inputPath, string outputPath) {
+	public static void ProcessFile(this GDalContext elevationModel, string inputPath, string outputPath) {
 		using var fs = File.OpenRead(inputPath);
 		var reader = new Utf8JsonReader(ReadAllBytes(fs), isFinalBlock: true, state: default);
 
@@ -54,7 +54,7 @@ public static class StreamingGeoJsonProcessor {
 	}
 
 	/// <summary> Adds the Z Dimension from the <paramref name="elevationModel"/> to the <paramref name="coordinates"/> </summary>
-	public static void AddElevationAsZ(this ElevationModelSampler elevationModel, byte[] featureJson, Utf8JsonWriter writer) {
+	public static void AddElevationAsZ(this GDalContext elevationModel, byte[] featureJson, Utf8JsonWriter writer) {
 		using var doc = JsonDocument.Parse(featureJson);
 		var root = doc.RootElement;
 

@@ -30,7 +30,7 @@ public static class GeoJsonProcessor {
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\Obsidian.SpocWeb\_Standards\Earth\Continent")]
 	public static void AddElevationAsZ(string vrtElevationFile, string geoJsonDirectory) {//, int parallelism = 8) {
-		using var elevationModel = new ElevationModelSampler(vrtElevationFile);
+		using var elevationModel = new GDalContext(vrtElevationFile, new HistogramSchema());
 		var dir = new DirectoryInfo(geoJsonDirectory);
 		foreach (var geoJsonFile in dir.EnumerateFiles(GeoJsonPattern, SearchOption.AllDirectories)) {
 			Trace.WriteLine(geoJsonFile.FullName);
@@ -50,7 +50,7 @@ public static class GeoJsonProcessor {
 		}
 	}
 
-	public static void AddElevationAsZ(this ElevationModelSampler elevationModel, FileInfo inputPath, string outputPath) {//y, int parallelism = 80) {
+	public static void AddElevationAsZ(this GDalContext elevationModel, FileInfo inputPath, string outputPath) {//y, int parallelism = 80) {
 		//var options = new ParallelOptions { MaxDegreeOfParallelism = parallelism };
 
 		using var reader = new StreamReader(inputPath.FullName);
@@ -90,7 +90,7 @@ public static class GeoJsonProcessor {
 		}
 	}
 
-	static string SerializeElevatedFeature(ElevationModelSampler elevationModel, JToken feature) {
+	static string SerializeElevatedFeature(GDalContext elevationModel, JToken feature) {
 		var geometryElement = feature["geometry"];
 		var geomZ = geometryElement == null || geometryElement.Type == JTokenType.Null
 			? null

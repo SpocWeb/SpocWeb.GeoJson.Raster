@@ -8,7 +8,7 @@ public static class GeometryZ {
 	public static GeometryFactory GeometryFactory = new();
 
 	/// <summary> Adds the Z Dimension from the <paramref name="elevationModel"/> to the <paramref name="geometry"/> </summary>
-	public static Geometry AddElevationAsZ(this ElevationModelSampler elevationModel, Geometry geometry)
+	public static Geometry AddElevationAsZ(this GDalContext elevationModel, Geometry geometry)
 		=> geometry switch {
 		Point p => GeometryFactory.CreatePoint(elevationModel.AddElevationAsZ(p.Coordinate)),
 		LinearRing lr => GeometryFactory.CreateLinearRing(elevationModel.AddElevationAsZ(lr.Coordinates)),
@@ -26,7 +26,7 @@ public static class GeometryZ {
 	};
 
 	/// <summary> Adds the Z Dimension from the <paramref name="elevationModel"/> to the <paramref name="polygon"/> </summary>
-	public static Polygon AddElevationAsZ(this ElevationModelSampler elevationModel, Polygon polygon) {
+	public static Polygon AddElevationAsZ(this GDalContext elevationModel, Polygon polygon) {
 		var shell = GeometryFactory.CreateLinearRing(elevationModel.AddElevationAsZ(polygon.Shell.Coordinates));
 		var holes = polygon.Holes
 			.Select(h => GeometryFactory.CreateLinearRing(elevationModel.AddElevationAsZ(h.Coordinates)))
@@ -35,13 +35,13 @@ public static class GeometryZ {
 	}
 
 	/// <summary> Adds the Z Dimension from the <paramref name="elevationModel"/> to the <paramref name="coordinates"/> </summary>
-	public static Coordinate[] AddElevationAsZ(this ElevationModelSampler elevationModel, Coordinate[] coordinates)
+	public static Coordinate[] AddElevationAsZ(this GDalContext elevationModel, Coordinate[] coordinates)
 		=> double.IsNaN(coordinates[0].Z)
 			? coordinates.Select(elevationModel.AddElevationAsZ).ToArray()
 			: coordinates;
 
 	/// <summary> Adds the Z Dimension from the <paramref name="elevationModel"/> to the <paramref name="coordinates"/> </summary>
-	public static Coordinate AddElevationAsZ(this ElevationModelSampler elevationModel, Coordinate coordinates)
+	public static Coordinate AddElevationAsZ(this GDalContext elevationModel, Coordinate coordinates)
 		=> double.IsNaN(coordinates.Z)
 		? new CoordinateZ(coordinates.X, coordinates.Y, Math.Round(elevationModel.Sample(coordinates.X, coordinates.Y), 4))
 		: coordinates;

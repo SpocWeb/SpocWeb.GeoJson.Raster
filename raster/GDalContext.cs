@@ -91,8 +91,8 @@ public sealed class GDalContext : IDisposable {
 	private readonly Envelope _rasterExtent;
 
 	public static void InitGdal() {
-		Gdal.SetConfigOption("GDAL_DATA", @"C:\OSGeo4W64\share\gdal");
-		Gdal.SetConfigOption("PROJ_LIB", @"C:\OSGeo4W64\share\proj");
+		Gdal.SetConfigOption("GDAL_DATA", @"C:\OSGeo4W\share\gdal");
+		Gdal.SetConfigOption("PROJ_LIB", @"C:\OSGeo4W\share\proj");
 		Gdal.AllRegister();
 	}
 
