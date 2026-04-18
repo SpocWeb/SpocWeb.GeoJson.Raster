@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11626.88 stable
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpocWeb.GeoJson.Raster", "SpocWeb.GeoJson.Raster.csproj", "{0C5CB059-C070-448D-886D-951DBB47F022}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpocWeb.Proxies", "..\SpocWeb.Proxies\SpocWeb.Proxies.csproj", "{08288E67-93BA-DE2F-C263-BBC2325C51E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpocWeb.Minimal", "..\SpocWeb.Minimal\SpocWeb.Minimal.csproj", "{72F08848-0230-E23A-36D0-FFC7DDD81D00}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C5CB059-C070-448D-886D-951DBB47F022}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C5CB059-C070-448D-886D-951DBB47F022}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C5CB059-C070-448D-886D-951DBB47F022}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C5CB059-C070-448D-886D-951DBB47F022}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08288E67-93BA-DE2F-C263-BBC2325C51E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08288E67-93BA-DE2F-C263-BBC2325C51E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08288E67-93BA-DE2F-C263-BBC2325C51E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08288E67-93BA-DE2F-C263-BBC2325C51E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72F08848-0230-E23A-36D0-FFC7DDD81D00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72F08848-0230-E23A-36D0-FFC7DDD81D00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72F08848-0230-E23A-36D0-FFC7DDD81D00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72F08848-0230-E23A-36D0-FFC7DDD81D00}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F04DA3C9-43A7-4D1F-A06A-7895E4D2E843}
+	EndGlobalSection
+EndGlobal
