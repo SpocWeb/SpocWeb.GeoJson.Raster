@@ -152,10 +152,11 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	public const string GeoJsonPattern = "*" + GeoJsonExtension;
 
 	/// <summary> Uses an existing VRT and writes compact histograms into the output GeoJSON </summary> 
-	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
-	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
-	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
-	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\Obsidian.SpocWeb\_Standards\Earth\Continent")]
+	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
+	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
+	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
+	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\Obsidian.SpocWeb\_Standards\Earth\Continent")]
+	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent\Europe\Europe~West\France")]
 	public static void AddHistogram(string vrtElevationFile, string geoJsonDirectory, Epsg geoJsonEpsg = Epsg.Wgs84) {//, int parallelism = 8) {
 		var histogram = HistogramSchemaFactory.Create("Elevation0-9000", 0, 9000, 9000/50); //8850m Mt Everest
 		var dir = new DirectoryInfo(geoJsonDirectory);
@@ -166,7 +167,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			Console.WriteLine(geoJsonFile.FullName);
 			var outputPath = new FileInfo(geoJsonFile.FullName
 				.Substring(0, geoJsonFile.FullName.Length - GeoJsonExtension.Length) + "Z" + GeoJsonExtension);
-			gDal.ProcessGeoJsonAgainstRasterParallel(histogram,
+			gDal.AddHistogramAreas(histogram,
 				vrtElevationFile,
 				geoJsonFile,
 				outputPath,
@@ -187,8 +188,57 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		return new Envelope(minX, maxX, minY, maxY);
 	}
 
+	/// <summary> Loads the GeoJSON, computes histogram Areas, and writes the output file. </summary> 
+	public static void AddHistogramAreas(this GDalContext gDal
+		, HistogramSchema schema,
+		string rasterPath,
+		FileInfo inputGeoJsonPath,
+		FileInfo outputGeoJsonPath,
+		Epsg geoJsonEpsg = Epsg.Wgs84
+		//int effectiveMaxDegreeOfParallelism,
+		//int featureBatchSize
+		) {
+		var featureCollection = inputGeoJsonPath.GeoJsonDeserialize<Feature>();
+		if (featureCollection == null) {
+			throw new InvalidOperationException("Could not read FeatureCollection from GeoJSON.");
+		}
+		IFeature[] features = [featureCollection]; //.ToArray();
+		var results = new long[features.Length][];
+		if (features.Length == 0) {
+			outputGeoJsonPath.GeoJsonSerialize(featureCollection, 0);
+			return;
+		}
+		features.ForEach((f, i) => results[i] = gDal.GetHistogram(f));
+
+		//ParallelOptions options = new ParallelOptions { MaxDegreeOfParallelism = effectiveMaxDegreeOfParallelism };
+		//var partitions = Partitioner.Create(0, features.Length, featureBatchSize);
+		//Parallel.ForEach(partitions, options, () =>
+		//(range, loopState, worker) => {
+		//for (int index = range.Item1; index < range.Item2; index++) {
+		//	results[index] = worker.GetHistogram(features[index]);
+		//}
+		//	return worker;
+		//},
+		//worker => worker.Dispose());
+
+		for (var index = 0; index < features.Length; index++) {
+			var feature = features[index];
+			if (feature is null) {
+				continue;
+			}
+
+			var attributes = GetOrCreateAttributes(feature);
+			var counts = results[index] ?? new long[schema.BucketCount];
+
+			SetAttribute(attributes, "hist_schema_id", schema.HistogramSchemaId);
+			SetAttribute(attributes, "elev_hist_counts", counts);
+		}
+
+		outputGeoJsonPath.GeoJsonSerialize(featureCollection, 0);
+	}
+
 	/// <summary> Loads the GeoJSON, computes histogram counts in parallel, and writes the compact output file. </summary> 
-	public static void ProcessGeoJsonAgainstRasterParallel(this GDalContext gDal
+	public static void AddHistogramCounts(this GDalContext gDal
 		, HistogramSchema schema,
 		string rasterPath,
 		FileInfo inputGeoJsonPath,
@@ -232,8 +282,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			SetAttribute(attributes, "hist_schema_id", schema.HistogramSchemaId);
 			SetAttribute(attributes, "elev_hist_counts", counts);
 		}
-
-		outputGeoJsonPath.GeoJsonSerialize(featureCollection, 0);
+		outputGeoJsonPath.GeoJsonSerialize(featureCollection, 0, "");
 	}
 
 	/// <summary> Validates that the histogram schema is internally consistent. </summary> 
@@ -566,12 +615,13 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		var windowWidth = xEnd - xOff;
 		var windowHeight = yEnd - yOff;
 
-		if (windowWidth <= 0 || windowHeight <= 0) {
+		if (windowWidth <= 0 ||
+			windowHeight <= 0) {
 			return counts;
 		}
 
-		var values = new double[windowWidth * windowHeight];
-		band.ReadRaster(xOff, yOff, windowWidth, windowHeight, values, windowWidth, windowHeight, 0, 0);
+		var elevations = new double[windowWidth * windowHeight];
+		band.ReadRaster(xOff, yOff, windowWidth, windowHeight, elevations, windowWidth, windowHeight, 0, 0);
 
 		var locator = new IndexedPointInAreaLocator(polygonInRasterCrs);
 		var bucketWidthM = schema.BucketWidthM;
@@ -584,8 +634,8 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			var rowStart = row * windowWidth;
 
 			for (var col = 0; col < windowWidth; col++) {
-				var value = values[rowStart + col];
-				if (IsNoData(value, hasNoDataValue, noDataValue)) {
+				var elevation = elevations[rowStart + col];
+				if (IsNoData(elevation, hasNoDataValue, noDataValue)) {
 					continue;
 				}
 
@@ -596,12 +646,12 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 				}
 
 				int bucketIndex;
-				if (value < histogramMinM) {
+				if (elevation < histogramMinM) {
 					bucketIndex = 0;
-				} else if (value >= histogramMaxM) {
+				} else if (elevation >= histogramMaxM) {
 					bucketIndex = bucketCount - 1;
 				} else {
-					bucketIndex = (int) Math.Floor((value - histogramMinM) / bucketWidthM);
+					bucketIndex = (int) Math.Floor((elevation - histogramMinM) / bucketWidthM);
 				}
 				counts[bucketIndex]++;
 			}
