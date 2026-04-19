@@ -2,10 +2,10 @@
 
 namespace org.SpocWeb.root.files.Tests.raster;
 
+using NetTopologySuite.Algorithm;
 using NetTopologySuite.Algorithm.Locate;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
-using NetTopologySuite.IO;
 using Newtonsoft.Json;
 using OSGeo.GDAL;
 using OSGeo.OSR;
@@ -13,20 +13,28 @@ using static GDalContext;
 
 /// <summary> (shared) histogram bin definition.  </summary>  
 public sealed class HistogramBin {
-	/// <summary> zero-based index of the bin. </summary>  
+	/// <summary> zero-based index of this bin. </summary>  
 	public int BinIndex { get; set; }
 
-	/// <summary> inclusive lower bound of the bin </summary>  
-	public double MinimumValueM { get; set; }
+	/// <summary> inclusive lower bound of this bin </summary>  
+	public double MinimumValue { get; set; }
 
-	/// <summary> upper bound of the bin </summary>  
-	public double MaximumValueM { get; set; }
+	/// <summary> upper bound of this bin </summary>  
+	public double MaximumValue { get; set; }
 
-	/// <summary> exact interval notation for the bin. </summary>  
+	/// <summary> Mid Value of this bin </summary>  
+	public double MidValue => (MaximumValue + MinimumValue) * 0.5;
+
+	/// <summary> Width of this bin </summary>  
+	public double Width => (MaximumValue - MinimumValue) * 0.5;
+
+	/// <summary> exact interval notation for this bin. </summary>  
 	public string IntervalNotation { get; set; }
 
-	/// <summary> human-readable label for the bin. </summary>  
+	/// <summary> human-readable label for this bin. </summary>  
 	public string Label { get; set; }
+
+	public override string ToString() => Label;
 }
 
 /// <summary> shared histogram schema used by all features. </summary>  
@@ -63,43 +71,50 @@ public sealed class HistogramSchema {
 	public List<HistogramBin> Bins { get; set; }
 }
 
-/// <inheritdoc cref="Create(string, double, double, int, int)"/>
+/// <inheritdoc cref="CreateFromRange(string, double, double, int, int)"/>
 public static class HistogramSchemaFactory {
 
 	/// <summary>  Creates shared histogram schema definitions. </summary>
-	public static HistogramSchema Create(
+	public static HistogramSchema CreateFromWidth(
 		string histogramSchemaId,
-		double histogramMinM,
-		double histogramMaxM,
+		double histogramMin,
+		int bucketCount,
+		double bucketWidth,
+		int labelDecimalPlaces = 2) => CreateFromRange(histogramSchemaId,
+		histogramMin,
+		histogramMin + bucketCount * bucketWidth,
+		bucketCount,
+		labelDecimalPlaces = 2);
+
+	/// <summary>  Creates shared histogram schema definitions. </summary>
+	public static HistogramSchema CreateFromRange(
+		string histogramSchemaId,
+		double histogramMin,
+		double histogramMax,
 		int bucketCount,
 		int labelDecimalPlaces = 2) {
 		if (string.IsNullOrWhiteSpace(histogramSchemaId)) {
 			throw new ArgumentException("histogramSchemaId is required.", nameof(histogramSchemaId));
 		}
-
-		if (double.IsNaN(histogramMinM) || double.IsInfinity(histogramMinM)) {
-			throw new ArgumentOutOfRangeException(nameof(histogramMinM), "histogramMinM must be finite.");
+		if (double.IsNaN(histogramMin) || double.IsInfinity(histogramMin)) {
+			throw new ArgumentOutOfRangeException(nameof(histogramMin), "histogramMinM must be finite.");
 		}
-
-		if (double.IsNaN(histogramMaxM) || double.IsInfinity(histogramMaxM)) {
-			throw new ArgumentOutOfRangeException(nameof(histogramMaxM), "histogramMaxM must be finite.");
+		if (double.IsNaN(histogramMax) || double.IsInfinity(histogramMax)) {
+			throw new ArgumentOutOfRangeException(nameof(histogramMax), "histogramMaxM must be finite.");
 		}
-
-		if (histogramMaxM <= histogramMinM) {
-			throw new ArgumentOutOfRangeException(nameof(histogramMaxM), "histogramMaxM must be greater than histogramMinM.");
+		if (histogramMax <= histogramMin) {
+			throw new ArgumentOutOfRangeException(nameof(histogramMax), "histogramMaxM must be greater than histogramMinM.");
 		}
-
 		if (bucketCount <= 0) {
 			throw new ArgumentOutOfRangeException(nameof(bucketCount), "bucketCount must be greater than zero.");
 		}
-
 		if (labelDecimalPlaces < 0) {
 			throw new ArgumentOutOfRangeException(nameof(labelDecimalPlaces), "labelDecimalPlaces must be zero or greater.");
 		}
+		var bucketWidth = (histogramMax - histogramMin) / bucketCount;
 
-		var bucketWidthM = (histogramMaxM - histogramMinM) / bucketCount;
+
 		var bins = new List<HistogramBin>(bucketCount);
-
 		var labelFormat = labelDecimalPlaces > 0
 			? "0." + new string('0', labelDecimalPlaces)
 			: "0";
@@ -107,24 +122,24 @@ public static class HistogramSchemaFactory {
 
 		for (var binIndex = 0; binIndex < bucketCount; binIndex++) {
 			var isLastBin = binIndex == bucketCount - 1;
-			var minimumValueM = histogramMinM + (binIndex * bucketWidthM);
-			var maximumValueM = isLastBin
-				? histogramMaxM
-				: histogramMinM + ((binIndex + 1) * bucketWidthM);
+			var minimumValue = histogramMin + (binIndex * bucketWidth);
+			var maximumValue = isLastBin
+				? histogramMax
+				: histogramMin + ((binIndex + 1) * bucketWidth);
 
 			var intervalNotation = isLastBin
-				? "[" + minimumValueM.ToString(exactFormat, CultureInfo.InvariantCulture) + ", " + histogramMaxM.ToString(exactFormat, CultureInfo.InvariantCulture) + "]"
-				: "[" + minimumValueM.ToString(exactFormat, CultureInfo.InvariantCulture) + ", " + maximumValueM.ToString(exactFormat, CultureInfo.InvariantCulture) + ")";
+				? "[" + minimumValue.ToString(exactFormat, CultureInfo.InvariantCulture) + ", " + histogramMax.ToString(exactFormat, CultureInfo.InvariantCulture) + "]"
+				: "[" + minimumValue.ToString(exactFormat, CultureInfo.InvariantCulture) + ", " + maximumValue.ToString(exactFormat, CultureInfo.InvariantCulture) + ")";
 
-			var label = minimumValueM.ToString(labelFormat, CultureInfo.InvariantCulture)
+			var label = minimumValue.ToString(labelFormat, CultureInfo.InvariantCulture)
 				+ " to "
-				+ maximumValueM.ToString(labelFormat, CultureInfo.InvariantCulture)
+				+ maximumValue.ToString(labelFormat, CultureInfo.InvariantCulture)
 				+ " m";
 
 			bins.Add(new HistogramBin {
 				BinIndex = binIndex,
-				MinimumValueM = minimumValueM,
-				MaximumValueM = maximumValueM,
+				MinimumValue = minimumValue,
+				MaximumValue = maximumValue,
 				IntervalNotation = intervalNotation,
 				Label = label
 			});
@@ -136,10 +151,10 @@ public static class HistogramSchemaFactory {
 			IntervalConvention = "LeftClosedRightOpenExceptLastClosed",
 			OutOfRangePolicy = "FoldIntoEdgeBins",
 			CellInclusionRule = "PixelCenterInsideOrBoundary",
-			MinimumValueM = histogramMinM,
-			MaximumValueM = histogramMaxM,
+			MinimumValueM = histogramMin,
+			MaximumValueM = histogramMax,
 			BucketCount = bucketCount,
-			BucketWidthM = bucketWidthM,
+			BucketWidthM = bucketWidth,
 			Bins = bins
 		};
 	}
@@ -151,6 +166,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	public const string GeoJsonExtension = ".geoJson";
 	public const string GeoJsonPattern = "*" + GeoJsonExtension;
 
+	/// <summary> Mean Earth radius used by the spherical pixel-area approximation. </summary>  
+	public const double EarthRadiusKM = 6_371.008_8;
+
 	/// <summary> Uses an existing VRT and writes compact histograms into the output GeoJSON </summary> 
 	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
 	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
@@ -158,7 +176,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\Obsidian.SpocWeb\_Standards\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent\Europe\Europe~West\France")]
 	public static void AddHistogram(string vrtElevationFile, string geoJsonDirectory, Epsg geoJsonEpsg = Epsg.Wgs84) {//, int parallelism = 8) {
-		var histogram = HistogramSchemaFactory.Create("Elevation0-9000", 0, 9000, 9000/50); //8850m Mt Everest
+		var halfWidth = 25;
+		var histogram = HistogramSchemaFactory.CreateFromWidth("Elevation0-9000", -100 + halfWidth * 0.5, 9000/ halfWidth, halfWidth); //8850m Mt Everest
+		double areaKM2 = EarthRadiusKM * EarthRadiusKM;
 		var dir = new DirectoryInfo(geoJsonDirectory);
 		using var gDal = new GDalContext(vrtElevationFile, histogram, geoJsonEpsg);
 		foreach (var geoJsonFile in dir.EnumerateFiles(GeoJsonPattern, SearchOption.AllDirectories)) {
@@ -166,14 +186,19 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			Debug.WriteLine(geoJsonFile.FullName);
 			Console.WriteLine(geoJsonFile.FullName);
 			var outputPath = new FileInfo(geoJsonFile.FullName
-				.Substring(0, geoJsonFile.FullName.Length - GeoJsonExtension.Length) + "Z" + GeoJsonExtension);
-			gDal.AddHistogramAreas(histogram,
-				vrtElevationFile,
-				geoJsonFile,
-				outputPath,
-				geoJsonEpsg); //, ResolveMaxDegreeOfParallelism(maxDegreeOfParallelism), featureBatchSize);
-			geoJsonFile.Delete();
-			outputPath.MoveTo(geoJsonFile);
+				.Substring(0, geoJsonFile.FullName.Length - GeoJsonExtension.Length) + "H" + GeoJsonExtension);
+			try {
+				if (gDal.AddHistogramAreas(histogram, geoJsonFile, outputPath, areaKM2, "area_km2")) {
+					geoJsonFile.Delete();
+					outputPath.MoveTo(geoJsonFile);
+				} else {
+					Trace.WriteLine($"Ignored {geoJsonFile.FullName}");
+				}
+			} catch (Exception x) {
+				Debug.WriteLine(geoJsonFile.FullName + x);
+				Trace.TraceError(geoJsonFile.FullName + x);
+				Console.Error.WriteLine(geoJsonFile.FullName + x);
+			}
 		}
 	}
 
@@ -189,52 +214,51 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	}
 
 	/// <summary> Loads the GeoJSON, computes histogram Areas, and writes the output file. </summary> 
-	public static void AddHistogramAreas(this GDalContext gDal
-		, HistogramSchema schema,
-		string rasterPath,
-		FileInfo inputGeoJsonPath,
-		FileInfo outputGeoJsonPath,
-		Epsg geoJsonEpsg = Epsg.Wgs84
-		//int effectiveMaxDegreeOfParallelism,
-		//int featureBatchSize
-		) {
-		var featureCollection = inputGeoJsonPath.GeoJsonDeserialize<Feature>();
-		if (featureCollection == null) {
+	public static bool AddHistogramAreas(this GDalContext gDal
+		, HistogramSchema histogram, FileInfo inputGeoJsonPath, FileInfo outputGeoJsonPath, double scale, string label) {
+		var feature = inputGeoJsonPath.GeoJsonDeserialize<Feature>();
+		if (feature == null) {
 			throw new InvalidOperationException("Could not read FeatureCollection from GeoJSON.");
 		}
-		IFeature[] features = [featureCollection]; //.ToArray();
-		var results = new long[features.Length][];
-		if (features.Length == 0) {
-			outputGeoJsonPath.GeoJsonSerialize(featureCollection, 0);
-			return;
+		var attributes = feature.GetOrCreateAttributes();
+		var oldHist = attributes.GetAttribute("hist_" + label);
+		if (oldHist != null) {
+			return false;
 		}
-		features.ForEach((f, i) => results[i] = gDal.GetHistogram(f));
 
-		//ParallelOptions options = new ParallelOptions { MaxDegreeOfParallelism = effectiveMaxDegreeOfParallelism };
-		//var partitions = Partitioner.Create(0, features.Length, featureBatchSize);
-		//Parallel.ForEach(partitions, options, () =>
-		//(range, loopState, worker) => {
-		//for (int index = range.Item1; index < range.Item2; index++) {
-		//	results[index] = worker.GetHistogram(features[index]);
-		//}
-		//	return worker;
-		//},
-		//worker => worker.Dispose());
-
-		for (var index = 0; index < features.Length; index++) {
-			var feature = features[index];
-			if (feature is null) {
+		var areas = gDal.GetHistogramAreas(feature);
+		var totalArea = areas.Sum();
+		var avgArea = totalArea / areas.Length;
+		var minArea = avgArea / areas.Length;
+		var digits = 2 - (int) Math.Log10(minArea * scale);
+		var areaByElevation = new Dictionary<int, double>();
+		for (var i = 0; i < areas.Length; i++) {
+			var area = areas[i];
+			if (area <= minArea) {
 				continue;
 			}
-
-			var attributes = GetOrCreateAttributes(feature);
-			var counts = results[index] ?? new long[schema.BucketCount];
-
-			SetAttribute(attributes, "hist_schema_id", schema.HistogramSchemaId);
-			SetAttribute(attributes, "elev_hist_counts", counts);
+			var histogramBin = histogram.Bins[i];
+			var rounded = Round(area * scale, digits);
+			areaByElevation[(int) histogramBin.MidValue] = (double)rounded;
 		}
 
-		outputGeoJsonPath.GeoJsonSerialize(featureCollection, 0);
+		SetAttribute(attributes, label, Round(totalArea * scale, digits));
+		SetAttribute(attributes, "hist_schema_id", histogram.HistogramSchemaId);
+		SetAttribute(attributes, "hist_" + label, areaByElevation);
+
+		var sb = new StringBuilder();
+		sb.GeoJsonSerialize(feature, 0, "");
+		sb.Replace(@"]],[[", "]],\n[[");
+		sb.Replace(@"},", "}\n,");
+		//outputGeoJsonPath.GeoJsonSerialize(feature, 0, "");
+		outputGeoJsonPath.WriteAllText(sb.ToString());
+		return true;
+	}
+
+	public static decimal Round(this double value, int digits) {
+		var pow10 = Math.Pow(10, -digits);
+		var result = Math.Round(value / pow10, 0, MidpointRounding.AwayFromZero) * pow10;
+		return (decimal) result;
 	}
 
 	/// <summary> Loads the GeoJSON, computes histogram counts in parallel, and writes the compact output file. </summary> 
@@ -257,7 +281,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			outputGeoJsonPath.GeoJsonSerialize(featureCollection, 0);
 			return;
 		}
-		features.ForEach((f,i) => results[i] = gDal.GetHistogram(f));
+		features.ForEach((f,i) => results[i] = gDal.GetHistogramCounts(f));
 
 		//ParallelOptions options = new ParallelOptions { MaxDegreeOfParallelism = effectiveMaxDegreeOfParallelism };
 		//var partitions = Partitioner.Create(0, features.Length, featureBatchSize);
@@ -385,9 +409,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	}
 
 	/// <summary> Quotes one command-line argument. </summary> 
-	private static string QuoteArgument(string value) {
-		return "\"" + value + "\"";
-	}
+	private static string QuoteArgument(string value) => "\"" + value + "\"";
 
 	/// <summary> Attempts to delete a file and suppresses deletion errors. </summary> 
 	private static void TryDeleteFile(string path) {
@@ -401,7 +423,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	}
 
 	/// <summary> Gets the feature attribute table or creates one if it does not exist. </summary> 
-	private static IAttributesTable GetOrCreateAttributes(IFeature feature) {
+	private static IAttributesTable GetOrCreateAttributes(this IFeature feature) {
 		if (feature == null) {
 			throw new InvalidOperationException("Feature is null.");
 		}
@@ -412,13 +434,17 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	}
 
 	/// <summary> Sets or adds one feature attribute value. </summary> 
-	private static void SetAttribute(IAttributesTable attributes, string name, object value) {
+	public static void SetAttribute(this IAttributesTable attributes, string name, object value) {
 		if (attributes.Exists(name)) {
 			attributes[name] = value;
 		} else {
 			attributes.Add(name, value);
 		}
 	}
+
+	/// <summary> Sets or adds one feature attribute value. </summary> 
+	public static object? GetAttribute(this IAttributesTable attributes, string name, object? fallBack = null)
+		=> attributes.Exists(name) ? attributes[name] : fallBack;
 
 	/// <summary> Determines whether a raster value should be treated as NoData. </summary> 
 	private static bool IsNoData(double value, bool hasNoDataValue, double noDataValue) {
@@ -436,11 +462,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	/// <summary> Transforms a polygonal geometry into the raster coordinate reference system. </summary> 
 	public static Geometry TransformPolygonalGeometry(this Geometry geometry, CoordinateTransformation transform) {
 		var geometryFactory = geometry.Factory;
-
 		if (geometry is Polygon polygon) {
 			return polygon.TransformPolygon( transform, geometryFactory);
 		}
-
 		if (geometry is MultiPolygon multiPolygon) {
 			var polygons = new Polygon[multiPolygon.NumGeometries];
 			for (var i = 0; i < multiPolygon.NumGeometries; i++) {
@@ -448,19 +472,16 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			}
 			return geometryFactory.CreateMultiPolygon(polygons);
 		}
-
 		throw new NotSupportedException("Only Polygon and MultiPolygon are supported.");
 	}
 
 	/// <summary> Transforms one polygon into the raster coordinate reference system. </summary> 
 	public static Polygon TransformPolygon(this Polygon polygon, CoordinateTransformation transform, GeometryFactory geometryFactory) {
 		var shell = TransformLinearRing((LinearRing) polygon.ExteriorRing, transform, geometryFactory);
-
 		var holes = new LinearRing[polygon.NumInteriorRings];
 		for (var i = 0; i < polygon.NumInteriorRings; i++) {
 			holes[i] = TransformLinearRing((LinearRing) polygon.GetInteriorRingN(i), transform, geometryFactory);
 		}
-
 		return geometryFactory.CreatePolygon(shell, holes);
 	}
 
@@ -468,7 +489,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	static double[]? _Point;
 
 	/// <summary> Transforms one linear ring into the raster coordinate reference system. </summary> 
-	private static LinearRing TransformLinearRing(LinearRing ring, CoordinateTransformation transform, GeometryFactory geometryFactory) {
+	private static LinearRing TransformLinearRing(this LinearRing ring, CoordinateTransformation transform, GeometryFactory geometryFactory) {
 		Coordinate[] source = ring.Coordinates;
 		var target = new Coordinate[source.Length];
 		_Point ??= new double[2];
@@ -493,7 +514,6 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		if (spatialReference == null) {
 			return;
 		}
-
 		try {
 			var method = spatialReference.GetType().GetMethod("SetAxisMappingStrategy");
 			if (method == null) {
@@ -676,8 +696,8 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 				writer.WriteLine(
 					Csv.Escaped(schema.HistogramSchemaId) + "," +
 					bin.BinIndex.ToString(CultureInfo.InvariantCulture) + "," +
-					bin.MinimumValueM.ToString("0.###############", CultureInfo.InvariantCulture) + "," +
-					bin.MaximumValueM.ToString("0.###############", CultureInfo.InvariantCulture) + "," +
+					bin.MinimumValue.ToString("0.###############", CultureInfo.InvariantCulture) + "," +
+					bin.MaximumValue.ToString("0.###############", CultureInfo.InvariantCulture) + "," +
 					Csv.Escaped(bin.IntervalNotation) + "," +
 					Csv.Escaped(bin.Label));
 			}

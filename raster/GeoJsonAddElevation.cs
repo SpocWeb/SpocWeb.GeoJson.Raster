@@ -10,7 +10,7 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// 
 /// </summary>
 /// <see cref="StreamingGeoJsonProcessor"/>
-public static class GeoJsonProcessor {
+public static class GeoJsonAddElevation {
 	public const string GeoJsonExtension = ".geoJson";
 	public const string GeoJsonPattern = "*" + GeoJsonExtension;
 

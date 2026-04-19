@@ -127,11 +127,9 @@ public sealed class GDalContext : IDisposable {
 			Math.Abs(_GeoTransformMatrix[4]) > 1.0e-12) {
 			throw new NotSupportedException("This sample assumes a north-up raster with no rotation.");
 		}
-
 		if (_GeoTransformMatrix[5] >= 0) {
 			throw new NotSupportedException("This sample assumes a north-up raster with a negative pixel height.");
 		}
-
 		Band.GetNoDataValue(out var _noDataValue, out int hasNoDataFlag);
 		_hasNoDataValue = hasNoDataFlag == 1;
 
@@ -139,21 +137,18 @@ public sealed class GDalContext : IDisposable {
 		if (string.IsNullOrWhiteSpace(rasterProjectionWkt)) {
 			throw new InvalidOperationException("The raster dataset has no projection information.");
 		}
-
 		_sourceSrs = new SpatialReference(string.Empty);
 		_sourceSrs.ImportFromEPSG((int) geoJsonEpsg);
-
 		_rasterSrs = new SpatialReference(rasterProjectionWkt);
-
 		_sourceSrs.TrySetTraditionalGisAxisOrder();
 		_rasterSrs.TrySetTraditionalGisAxisOrder();
-
 		_transformToRaster = new CoordinateTransformation(_sourceSrs, _rasterSrs);
 		_rasterExtent = Dataset.CreateRasterExtentEnvelope(_GeoTransformMatrix);
 	}
 
 	/// <summary> Creates an empty histogram-count array for one feature. </summary> 
 	private static long[] CreateEmptyCounts(int bucketCount) => new long[bucketCount];
+	private static double[] CreateEmptyAreas(int bucketCount) => new double[bucketCount];
 
 	[ThreadStatic]
 	static double[] buffer;
@@ -175,44 +170,63 @@ public sealed class GDalContext : IDisposable {
 		}
 	}
 
-	/// <summary> Processes one feature and returns its compact histogram counts. </summary>
-	public long[] GetHistogram(IFeature feature) {
+	/// <summary> Calculates the histogram counts. </summary>
+	public long[] GetHistogramCounts(IFeature feature) {
 		if (feature == null || feature.Geometry == null) {
 			return CreateEmptyCounts(_histogram.BucketCount);
 		}
-
 		Geometry inputGeometry = feature.Geometry;
 		if (!(inputGeometry is Polygon) && !(inputGeometry is MultiPolygon)) {
 			return CreateEmptyCounts(_histogram.BucketCount);
 		}
-
 		Geometry zoneInRasterCrs = inputGeometry.TransformPolygonalGeometry(_transformToRaster);
 		if (zoneInRasterCrs == null || zoneInRasterCrs.IsEmpty) {
 			return CreateEmptyCounts(_histogram.BucketCount);
 		}
-
 		if (!zoneInRasterCrs.IsValid) {
 			zoneInRasterCrs = zoneInRasterCrs.Buffer(0);
 		}
-
 		if (zoneInRasterCrs == null || zoneInRasterCrs.IsEmpty) {
 			return CreateEmptyCounts(_histogram.BucketCount);
 		}
-
 		if (!(zoneInRasterCrs is Polygon) && !(zoneInRasterCrs is MultiPolygon)) {
 			return CreateEmptyCounts(_histogram.BucketCount);
 		}
-
 		if (!zoneInRasterCrs.EnvelopeInternal.Intersects(_rasterExtent)) {
 			return CreateEmptyCounts(_histogram.BucketCount);
 		}
-
 		return Dataset.PolygonHistogramByCounts(Band, zoneInRasterCrs, _GeoTransformMatrix, _hasNoDataValue, _noDataValue, _histogram);
 	}
 
-	/// <summary>  
-	/// Disposes all worker-local GDAL and spatial-reference resources.  
-	/// </summary>  
+	/// <summary> Calculates the histogram Areas. </summary>
+	public double[] GetHistogramAreas(IFeature feature) {
+		if (feature == null || feature.Geometry == null) {
+			return CreateEmptyAreas(_histogram.BucketCount);
+		}
+		Geometry inputGeometry = feature.Geometry;
+		if (!(inputGeometry is Polygon) && !(inputGeometry is MultiPolygon)) {
+			return CreateEmptyAreas(_histogram.BucketCount);
+		}
+		Geometry zoneInRasterCrs = inputGeometry.TransformPolygonalGeometry(_transformToRaster);
+		if (zoneInRasterCrs == null || zoneInRasterCrs.IsEmpty) {
+			return CreateEmptyAreas(_histogram.BucketCount);
+		}
+		if (!zoneInRasterCrs.IsValid) {
+			zoneInRasterCrs = zoneInRasterCrs.Buffer(0);
+		}
+		if (zoneInRasterCrs == null || zoneInRasterCrs.IsEmpty) {
+			return CreateEmptyAreas(_histogram.BucketCount);
+		}
+		if (!(zoneInRasterCrs is Polygon) && !(zoneInRasterCrs is MultiPolygon)) {
+			return CreateEmptyAreas(_histogram.BucketCount);
+		}
+		if (!zoneInRasterCrs.EnvelopeInternal.Intersects(_rasterExtent)) {
+			return CreateEmptyAreas(_histogram.BucketCount);
+		}
+		return Dataset.PolygonHistogramByArea(Band, zoneInRasterCrs, _GeoTransformMatrix, _hasNoDataValue, _noDataValue, _histogram);
+	}
+
+	/// <summary> Disposes all worker-local GDAL and spatial-reference resources. </summary>  
 	public void Dispose() {
 		if (_transformToRaster != null) {
 			_transformToRaster.Dispose();
