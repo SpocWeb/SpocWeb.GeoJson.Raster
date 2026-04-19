@@ -12,6 +12,7 @@ using static GDalContext;
 
 /// <summary> (shared) histogram bin definition.  </summary>  
 public sealed class HistogramBin {
+
 	/// <summary> zero-based index of this bin. </summary>  
 	public int BinIndex { get; set; }
 
@@ -55,16 +56,16 @@ public sealed class HistogramSchema {
 	public string CellInclusionRule { get; set; }
 
 	/// <summary> global histogram minimum </summary>  
-	public double MinimumValueM { get; set; }
+	public double MinimumValue { get; set; }
 
 	/// <summary> global histogram maximum </summary>  
-	public double MaximumValueM { get; set; }
+	public double MaximumValue { get; set; }
 
 	/// <summary> total number of bins in the histogram. </summary>  
 	public int BucketCount { get; set; }
 
 	/// <summary> width of each histogram bin </summary>  
-	public double BucketWidthM { get; set; }
+	public double BucketWidth { get; set; }
 
 	/// <summary> ordered collection of <see cref="HistogramBin"/>. </summary>  
 	public List<HistogramBin> Bins { get; set; }
@@ -150,10 +151,10 @@ public static class HistogramSchemaFactory {
 			IntervalConvention = "LeftClosedRightOpenExceptLastClosed",
 			OutOfRangePolicy = "FoldIntoEdgeBins",
 			CellInclusionRule = "PixelCenterInsideOrBoundary",
-			MinimumValueM = histogramMin,
-			MaximumValueM = histogramMax,
+			MinimumValue = histogramMin,
+			MaximumValue = histogramMax,
 			BucketCount = bucketCount,
-			BucketWidthM = bucketWidth,
+			BucketWidth = bucketWidth,
 			Bins = bins
 		};
 	}
@@ -174,31 +175,39 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\Obsidian.SpocWeb\_Standards\Earth\Continent")]
 	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent\Europe\Europe~West\France")]
-	public static void AddHistogram(string vrtElevationFile, string geoJsonDirectory, Epsg geoJsonEpsg = Epsg.Wgs84) {//, int parallelism = 8) {
+	public static void AddHistogram(string vrtElevationFile, string geoJsonDirectory
+		, Epsg geoJsonEpsg = Epsg.Wgs84, int parallelism = 0) {
 		var halfWidth = 25;
 		var histogram = HistogramSchemaFactory.CreateFromWidth("Elevation0-9000", -100 + halfWidth * 0.5, 9000/ halfWidth, halfWidth); //8850m Mt Everest
 		double areaKM2 = EarthRadiusKM * EarthRadiusKM;
 		var dir = new DirectoryInfo(geoJsonDirectory);
-		using var gDal = new GDalContext(vrtElevationFile, histogram, geoJsonEpsg);
-		foreach (var geoJsonFile in dir.EnumerateFiles(GeoJsonPattern, SearchOption.AllDirectories)) {
-			Trace.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
-			Debug.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
-			Console.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
-			var outputPath = new FileInfo(geoJsonFile.FullName
-				.Substring(0, geoJsonFile.FullName.Length - GeoJsonExtension.Length) + "H" + GeoJsonExtension);
-			try {
-				if (gDal.AddHistogramAreas(histogram, geoJsonFile, outputPath, areaKM2, "area_km2")) {
-					geoJsonFile.Delete();
-					outputPath.MoveTo(geoJsonFile);
-				} else {
-					Trace.WriteLine($"Ignored {geoJsonFile.FullName}");
+		var files = dir.EnumerateFiles(GeoJsonPattern, SearchOption.AllDirectories).ToList();
+		var effectiveParallelism = parallelism > 0 ? parallelism : Environment.ProcessorCount;
+		Parallel.ForEach(
+			files,
+			new ParallelOptions { MaxDegreeOfParallelism = effectiveParallelism },
+			() => new GDalContext(vrtElevationFile, histogram, geoJsonEpsg),
+			(geoJsonFile, loopState, localGDal) => {
+				Trace.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
+				Debug.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
+				Console.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
+				var outputPath = new FileInfo(geoJsonFile.FullName
+					.Substring(0, geoJsonFile.FullName.Length - GeoJsonExtension.Length) + "H" + GeoJsonExtension);
+				try {
+					if (localGDal.AddHistogramAreas(histogram, geoJsonFile, outputPath, areaKM2, "area_km2")) {
+						geoJsonFile.Delete();
+						outputPath.MoveTo(geoJsonFile.FullName);
+					} else {
+						Trace.WriteLine($"Ignored {geoJsonFile.FullName}");
+					}
+				} catch (Exception x) {
+					Debug.WriteLine(geoJsonFile.FullName + x);
+					Trace.TraceError(geoJsonFile.FullName + x);
+					Console.Error.WriteLine(geoJsonFile.FullName + x);
 				}
-			} catch (Exception x) {
-				Debug.WriteLine(geoJsonFile.FullName + x);
-				Trace.TraceError(geoJsonFile.FullName + x);
-				Console.Error.WriteLine(geoJsonFile.FullName + x);
-			}
-		}
+				return localGDal;
+			},
+			localGDal => localGDal.Dispose());
 	}
 
 	/// <summary> Creates the raster extent envelope from the dataset dimensions and geoTransform. </summary>  
@@ -321,15 +330,15 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			return "schema.HistogramSchemaId is required.";
 		}
 
-		if (double.IsNaN(schema.MinimumValueM) || double.IsInfinity(schema.MinimumValueM)) {
+		if (double.IsNaN(schema.MinimumValue) || double.IsInfinity(schema.MinimumValue)) {
 			return "schema.MinimumValueM must be finite.";
 		}
 
-		if (double.IsNaN(schema.MaximumValueM) || double.IsInfinity(schema.MaximumValueM)) {
+		if (double.IsNaN(schema.MaximumValue) || double.IsInfinity(schema.MaximumValue)) {
 			return "schema.MaximumValueM must be finite.";
 		}
 
-		if (schema.MaximumValueM <= schema.MinimumValueM) {
+		if (schema.MaximumValue <= schema.MinimumValue) {
 			return "schema.MaximumValueM must be greater than schema.MinimumValueM.";
 		}
 
@@ -341,8 +350,8 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			return "schema.Bins must contain exactly schema.BucketCount items.";
 		}
 
-		var expectedBucketWidthM = (schema.MaximumValueM - schema.MinimumValueM) / schema.BucketCount;
-		if (Math.Abs(schema.BucketWidthM - expectedBucketWidthM) > 1.0e-12) {
+		var expectedBucketWidthM = (schema.MaximumValue - schema.MinimumValue) / schema.BucketCount;
+		if (Math.Abs(schema.BucketWidth - expectedBucketWidthM) > 1.0e-12) {
 			return "schema.BucketWidthM is inconsistent with the min, max, and bucket count.";
 		}
 		return "";
@@ -576,9 +585,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		}
 
 		var locator = new IndexedPointInAreaLocator(polygonInRasterCrs);
-		var histogramMinM = schema.MinimumValueM;
-		var histogramMaxM = schema.MaximumValueM;
-		var bucketWidthM = schema.BucketWidthM;
+		var histogramMinM = schema.MinimumValue;
+		var histogramMaxM = schema.MaximumValue;
+		var bucketWidthM = schema.BucketWidth;
 		var bucketCount = schema.BucketCount;
 		var maxPageHeight = Math.Max(1, 168_435_456 / windowWidth);
 
@@ -647,9 +656,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		}
 
 		var locator = new IndexedPointInAreaLocator(polygonInRasterCrs);
-		var bucketWidthM = schema.BucketWidthM;
-		var histogramMinM = schema.MinimumValueM;
-		var histogramMaxM = schema.MaximumValueM;
+		var bucketWidthM = schema.BucketWidth;
+		var histogramMinM = schema.MinimumValue;
+		var histogramMaxM = schema.MaximumValue;
 		var bucketCount = schema.BucketCount;
 		var maxPageHeight = Math.Max(1, 168_435_456 / windowWidth);
 
