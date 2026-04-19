@@ -2,7 +2,6 @@ using org.SpocWeb.root.db.stream.ado;
 
 namespace org.SpocWeb.root.files.Tests.raster;
 
-using NetTopologySuite.Algorithm;
 using NetTopologySuite.Algorithm.Locate;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
@@ -182,9 +181,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		var dir = new DirectoryInfo(geoJsonDirectory);
 		using var gDal = new GDalContext(vrtElevationFile, histogram, geoJsonEpsg);
 		foreach (var geoJsonFile in dir.EnumerateFiles(GeoJsonPattern, SearchOption.AllDirectories)) {
-			Trace.WriteLine(geoJsonFile.FullName);
-			Debug.WriteLine(geoJsonFile.FullName);
-			Console.WriteLine(geoJsonFile.FullName);
+			Trace.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
+			Debug.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
+			Console.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
 			var outputPath = new FileInfo(geoJsonFile.FullName
 				.Substring(0, geoJsonFile.FullName.Length - GeoJsonExtension.Length) + "H" + GeoJsonExtension);
 			try {
