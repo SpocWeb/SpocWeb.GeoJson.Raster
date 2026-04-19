@@ -1,4 +1,4 @@
-﻿using org.SpocWeb.root.db.stream.ado;
+using org.SpocWeb.root.db.stream.ado;
 
 namespace org.SpocWeb.root.files.Tests.raster;
 
@@ -170,11 +170,11 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 	public const double EarthRadiusKM = 6_371.008_8;
 
 	/// <summary> Uses an existing VRT and writes compact histograms into the output GeoJSON </summary> 
-	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
-	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
-	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
-	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\Obsidian.SpocWeb\_Standards\Earth\Continent")]
-	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent\Europe\Europe~West\France")]
+	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
+	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
+	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
+	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\Obsidian.SpocWeb\_Standards\Earth\Continent")]
+	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent\Europe\Europe~West\France")]
 	public static void AddHistogram(string vrtElevationFile, string geoJsonDirectory, Epsg geoJsonEpsg = Epsg.Wgs84) {//, int parallelism = 8) {
 		var halfWidth = 25;
 		var histogram = HistogramSchemaFactory.CreateFromWidth("Elevation0-9000", -100 + halfWidth * 0.5, 9000/ halfWidth, halfWidth); //8850m Mt Everest
@@ -218,7 +218,7 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		, HistogramSchema histogram, FileInfo inputGeoJsonPath, FileInfo outputGeoJsonPath, double scale, string label) {
 		var feature = inputGeoJsonPath.GeoJsonDeserialize<Feature>();
 		if (feature == null) {
-			throw new InvalidOperationException("Could not read FeatureCollection from GeoJSON.");
+			throw new InvalidOperationException("Could not read FeatureCollection from GeoJSON " + inputGeoJsonPath.FullName);
 		}
 		var attributes = feature.GetOrCreateAttributes();
 		var oldHist = attributes.GetAttribute("hist_" + label);
@@ -228,6 +228,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 
 		var areas = gDal.GetHistogramAreas(feature);
 		var totalArea = areas.Sum();
+		if (totalArea <= 0) {
+			return false;
+		}
 		var avgArea = totalArea / areas.Length;
 		var minArea = avgArea / areas.Length;
 		var digits = 2 - (int) Math.Log10(minArea * scale);
@@ -573,42 +576,46 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			return areas;
 		}
 
-		var values = new double[windowWidth * windowHeight];
-		band.ReadRaster(xOff, yOff, windowWidth, windowHeight, values, windowWidth, windowHeight, 0, 0);
-
 		var locator = new IndexedPointInAreaLocator(polygonInRasterCrs);
 		var histogramMinM = schema.MinimumValueM;
 		var histogramMaxM = schema.MaximumValueM;
 		var bucketWidthM = schema.BucketWidthM;
 		var bucketCount = schema.BucketCount;
+		var maxPageHeight = Math.Max(1, 168_435_456 / windowWidth);
 
-		for (var row = 0; row < windowHeight; row++) {
-			var absoluteRowIndex = yOff + row;
-			var northEdgeLatitudeDegrees = geoTransform[3] + (absoluteRowIndex * geoTransform[5]);
-			var southEdgeLatitudeDegrees = geoTransform[3] + ((absoluteRowIndex + 1) * geoTransform[5]);
-			var pixelArea = ComputeGeographicPixelArea(pixelWidth, northEdgeLatitudeDegrees, southEdgeLatitudeDegrees);
-			var centerY = geoTransform[3] + ((absoluteRowIndex + 0.5) * geoTransform[5]);
-			var rowStart = row * windowWidth;
+		for (var pageStart = 0; pageStart < windowHeight; pageStart += maxPageHeight) {
+			var pageHeight = Math.Min(maxPageHeight, windowHeight - pageStart);
+			var values = new double[windowWidth * pageHeight];
+			band.ReadRaster(xOff, yOff + pageStart, windowWidth, pageHeight, values, windowWidth, pageHeight, 0, 0);
 
-			for (var col = 0; col < windowWidth; col++) {
-				var value = values[rowStart + col];
-				if (IsNoData(value, hasNoDataValue, noDataValue)) {
-					continue;
+			for (var row = 0; row < pageHeight; row++) {
+				var absoluteRowIndex = yOff + pageStart + row;
+				var northEdgeLatitudeDegrees = geoTransform[3] + (absoluteRowIndex * geoTransform[5]);
+				var southEdgeLatitudeDegrees = geoTransform[3] + ((absoluteRowIndex + 1) * geoTransform[5]);
+				var pixelArea = ComputeGeographicPixelArea(pixelWidth, northEdgeLatitudeDegrees, southEdgeLatitudeDegrees);
+				var centerY = geoTransform[3] + ((absoluteRowIndex + 0.5) * geoTransform[5]);
+				var rowStart = row * windowWidth;
+
+				for (var col = 0; col < windowWidth; col++) {
+					var value = values[rowStart + col];
+					if (IsNoData(value, hasNoDataValue, noDataValue)) {
+						continue;
+					}
+					var centerX = geoTransform[0] + ((xOff + col + 0.5) * geoTransform[1]);
+					var location = locator.Locate(new Coordinate(centerX, centerY));
+					if (location == Location.Exterior) {
+						continue;
+					}
+					int bucketIndex;
+					if (value < histogramMinM) {
+						bucketIndex = 0;
+					} else if (value >= histogramMaxM) {
+						bucketIndex = bucketCount - 1;
+					} else {
+						bucketIndex = (int) Math.Floor((value - histogramMinM) / bucketWidthM);
+					}
+					areas[bucketIndex] += pixelArea; //aggregate the areas
 				}
-				var centerX = geoTransform[0] + ((xOff + col + 0.5) * geoTransform[1]);
-				var location = locator.Locate(new Coordinate(centerX, centerY));
-				if (location == Location.Exterior) {
-					continue;
-				}
-				int bucketIndex;
-				if (value < histogramMinM) {
-					bucketIndex = 0;
-				} else if (value >= histogramMaxM) {
-					bucketIndex = bucketCount - 1;
-				} else {
-					bucketIndex = (int) Math.Floor((value - histogramMinM) / bucketWidthM);
-				}
-				areas[bucketIndex] += pixelArea; //aggregate the areas
 			}
 		}
 		return areas;
@@ -640,40 +647,44 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 			return counts;
 		}
 
-		var elevations = new double[windowWidth * windowHeight];
-		band.ReadRaster(xOff, yOff, windowWidth, windowHeight, elevations, windowWidth, windowHeight, 0, 0);
-
 		var locator = new IndexedPointInAreaLocator(polygonInRasterCrs);
 		var bucketWidthM = schema.BucketWidthM;
 		var histogramMinM = schema.MinimumValueM;
 		var histogramMaxM = schema.MaximumValueM;
 		var bucketCount = schema.BucketCount;
+		var maxPageHeight = Math.Max(1, 168_435_456 / windowWidth);
 
-		for (var row = 0; row < windowHeight; row++) {
-			var centerY = geoTransform[3] + ((yOff + row + 0.5) * geoTransform[5]);
-			var rowStart = row * windowWidth;
+		for (var pageStart = 0; pageStart < windowHeight; pageStart += maxPageHeight) {
+			var pageHeight = Math.Min(maxPageHeight, windowHeight - pageStart);
+			var elevations = new double[windowWidth * pageHeight];
+			band.ReadRaster(xOff, yOff + pageStart, windowWidth, pageHeight, elevations, windowWidth, pageHeight, 0, 0);
 
-			for (var col = 0; col < windowWidth; col++) {
-				var elevation = elevations[rowStart + col];
-				if (IsNoData(elevation, hasNoDataValue, noDataValue)) {
-					continue;
+			for (var row = 0; row < pageHeight; row++) {
+				var centerY = geoTransform[3] + ((yOff + pageStart + row + 0.5) * geoTransform[5]);
+				var rowStart = row * windowWidth;
+
+				for (var col = 0; col < windowWidth; col++) {
+					var elevation = elevations[rowStart + col];
+					if (IsNoData(elevation, hasNoDataValue, noDataValue)) {
+						continue;
+					}
+
+					var centerX = geoTransform[0] + ((xOff + col + 0.5) * geoTransform[1]);
+					var location = locator.Locate(new Coordinate(centerX, centerY));
+					if (location == Location.Exterior) {
+						continue;
+					}
+
+					int bucketIndex;
+					if (elevation < histogramMinM) {
+						bucketIndex = 0;
+					} else if (elevation >= histogramMaxM) {
+						bucketIndex = bucketCount - 1;
+					} else {
+						bucketIndex = (int) Math.Floor((elevation - histogramMinM) / bucketWidthM);
+					}
+					counts[bucketIndex]++;
 				}
-
-				var centerX = geoTransform[0] + ((xOff + col + 0.5) * geoTransform[1]);
-				var location = locator.Locate(new Coordinate(centerX, centerY));
-				if (location == Location.Exterior) {
-					continue;
-				}
-
-				int bucketIndex;
-				if (elevation < histogramMinM) {
-					bucketIndex = 0;
-				} else if (elevation >= histogramMaxM) {
-					bucketIndex = bucketCount - 1;
-				} else {
-					bucketIndex = (int) Math.Floor((elevation - histogramMinM) / bucketWidthM);
-				}
-				counts[bucketIndex]++;
 			}
 		}
 		return counts;
