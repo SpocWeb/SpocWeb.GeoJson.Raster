@@ -172,7 +172,7 @@ public static class GeoJsonHistogramEnricher {
 	/// <summary> Uses an existing VRT and writes compact histograms into the output GeoJSON </summary> 
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
-	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
+	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\Obsidian.SpocWeb\_Standards\Earth\Continent")]
 	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent\Europe\Europe~West\France")]
 	public static void AddHistogram(string vrtElevationFile, string geoJsonDirectory
@@ -188,9 +188,10 @@ public static class GeoJsonHistogramEnricher {
 			new ParallelOptions { MaxDegreeOfParallelism = effectiveParallelism },
 			() => new GDalContext(vrtElevationFile, histogram, geoJsonEpsg),
 			(geoJsonFile, loopState, localGDal) => {
-				Trace.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
-				Debug.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
-				Console.WriteLine(DateTime.Now + " " + geoJsonFile.FullName);
+				//var message = DateTime.Now + " " + geoJsonFile.FullName;
+				//Trace.WriteLine(message);
+				//Debug.WriteLine(message);
+				//Console.WriteLine(message);
 				var outputPath = new FileInfo(geoJsonFile.FullName
 					.Substring(0, geoJsonFile.FullName.Length - GeoJsonExtension.Length) + "H" + GeoJsonExtension);
 				try {
@@ -201,9 +202,10 @@ public static class GeoJsonHistogramEnricher {
 						Trace.WriteLine($"Ignored {geoJsonFile.FullName}");
 					}
 				} catch (Exception x) {
-					Debug.WriteLine(geoJsonFile.FullName + x);
-					Trace.TraceError(geoJsonFile.FullName + x);
-					Console.Error.WriteLine(geoJsonFile.FullName + x);
+					var errorMessage = geoJsonFile.FullName + x;
+					Debug.WriteLine(errorMessage);
+					Trace.TraceError(errorMessage);
+					Console.Error.WriteLine(errorMessage);
 				}
 				return localGDal;
 			},
@@ -234,7 +236,7 @@ public static class GeoJsonHistogramEnricher {
 			return false;
 		}
 
-		var areas = gDal.GetHistogramAreas(feature);
+		var areas = gDal.GetHistogramAreas(feature, inputGeoJsonPath.FullName);
 		var totalArea = areas.Sum();
 		if (totalArea <= 0) {
 			return false;
@@ -561,7 +563,7 @@ public static class GeoJsonHistogramEnricher {
 
 	/// <summary> Computes the area-weighted histogram for a polygon in raster coordinates. </summary>  
 	public static double[] PolygonHistogramByArea(this Dataset dem, Band band, Geometry polygonInRasterCrs
-		, double[] geoTransform, bool hasNoDataValue, double noDataValue, HistogramSchema schema) {
+		, double[] geoTransform, bool hasNoDataValue, double noDataValue, HistogramSchema schema, string context) {
 		var areas = new double[schema.BucketCount];
 
 		var envelope = polygonInRasterCrs.EnvelopeInternal;
@@ -589,9 +591,13 @@ public static class GeoJsonHistogramEnricher {
 		var histogramMaxM = schema.MaximumValue;
 		var bucketWidthM = schema.BucketWidth;
 		var bucketCount = schema.BucketCount;
-		var maxPageHeight = Math.Max(1, 168_435_456 / windowWidth);
+		var maxPageHeight = Math.Max(1, 8_388_608 / windowWidth); //stay below 64 MB
 
 		for (var pageStart = 0; pageStart < windowHeight; pageStart += maxPageHeight) {
+			var message = DateTime.Now + ": " + pageStart + " of " + windowHeight + " for " + context;
+			Trace.WriteLine(message);
+			Debug.WriteLine(message);
+			Console.WriteLine(message);
 			var pageHeight = Math.Min(maxPageHeight, windowHeight - pageStart);
 			var values = new double[windowWidth * pageHeight];
 			lock (GDalContext.GdalLock) {

@@ -206,7 +206,7 @@ public sealed class GDalContext : IDisposable {
 	}
 
 	/// <summary> Calculates the histogram Areas. </summary>
-	public double[] GetHistogramAreas(IFeature feature) {
+	public double[] GetHistogramAreas(IFeature feature, string context) {
 		if (feature == null || feature.Geometry == null) {
 			return CreateEmptyAreas(_histogram.BucketCount);
 		}
@@ -230,7 +230,7 @@ public sealed class GDalContext : IDisposable {
 		if (!zoneInRasterCrs.EnvelopeInternal.Intersects(_rasterExtent)) {
 			return CreateEmptyAreas(_histogram.BucketCount);
 		}
-		return Dataset.PolygonHistogramByArea(Band, zoneInRasterCrs, _GeoTransformMatrix, _hasNoDataValue, _noDataValue, _histogram);
+		return Dataset.PolygonHistogramByArea(Band, zoneInRasterCrs, _GeoTransformMatrix, _hasNoDataValue, _noDataValue, _histogram, context);
 	}
 
 	/// <summary> Disposes all worker-local GDAL and spatial-reference resources. </summary>  
