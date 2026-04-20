@@ -600,9 +600,8 @@ public static class GeoJsonHistogramEnricher {
 			Console.WriteLine(message);
 			var pageHeight = Math.Min(maxPageHeight, windowHeight - pageStart);
 			var values = new double[windowWidth * pageHeight];
-			lock (GDalContext.GdalLock) {
+			//lock (GDalContext.GdalLock)
 				band.ReadRaster(xOff, yOff + pageStart, windowWidth, pageHeight, values, windowWidth, pageHeight, 0, 0);
-			}
 
 			for (var row = 0; row < pageHeight; row++) {
 				var absoluteRowIndex = yOff + pageStart + row;
@@ -673,9 +672,8 @@ public static class GeoJsonHistogramEnricher {
 		for (var pageStart = 0; pageStart < windowHeight; pageStart += maxPageHeight) {
 			var pageHeight = Math.Min(maxPageHeight, windowHeight - pageStart);
 			var elevations = new double[windowWidth * pageHeight];
-			lock (GDalContext.GdalLock) {
+			//lock (GDalContext.GdalLock)
 				band.ReadRaster(xOff, yOff + pageStart, windowWidth, pageHeight, elevations, windowWidth, pageHeight, 0, 0);
-			}
 
 			for (var row = 0; row < pageHeight; row++) {
 				var centerY = geoTransform[3] + ((yOff + pageStart + row + 0.5) * geoTransform[5]);

@@ -166,9 +166,8 @@ public sealed class GDalContext : IDisposable {
 		var y = (int) Math.Round(py);
 		try {
 			buffer ??= new double[1];
-			lock (GdalLock) {
+			//lock (GdalLock)
 				Band.ReadRaster(x, y, 1, 1, buffer, 1, 1, 0, 0);
-			}
 			return buffer[0];
 		} catch (Exception e) {
 			Trace.TraceError(e + "");
