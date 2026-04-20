@@ -161,7 +161,7 @@ public static class HistogramSchemaFactory {
 }
 
 /// <summary> Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory. </summary>  
-public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
+public static class GeoJsonHistogramEnricher {
 
 	public const string GeoJsonExtension = ".geoJson";
 	public const string GeoJsonPattern = "*" + GeoJsonExtension;
@@ -594,7 +594,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		for (var pageStart = 0; pageStart < windowHeight; pageStart += maxPageHeight) {
 			var pageHeight = Math.Min(maxPageHeight, windowHeight - pageStart);
 			var values = new double[windowWidth * pageHeight];
-			band.ReadRaster(xOff, yOff + pageStart, windowWidth, pageHeight, values, windowWidth, pageHeight, 0, 0);
+			lock (GDalContext.GdalLock) {
+				band.ReadRaster(xOff, yOff + pageStart, windowWidth, pageHeight, values, windowWidth, pageHeight, 0, 0);
+			}
 
 			for (var row = 0; row < pageHeight; row++) {
 				var absoluteRowIndex = yOff + pageStart + row;
@@ -665,7 +667,9 @@ public static class CopernicusDemGeoJsonParallelCompactHistogramEnricher {
 		for (var pageStart = 0; pageStart < windowHeight; pageStart += maxPageHeight) {
 			var pageHeight = Math.Min(maxPageHeight, windowHeight - pageStart);
 			var elevations = new double[windowWidth * pageHeight];
-			band.ReadRaster(xOff, yOff + pageStart, windowWidth, pageHeight, elevations, windowWidth, pageHeight, 0, 0);
+			lock (GDalContext.GdalLock) {
+				band.ReadRaster(xOff, yOff + pageStart, windowWidth, pageHeight, elevations, windowWidth, pageHeight, 0, 0);
+			}
 
 			for (var row = 0; row < pageHeight; row++) {
 				var centerY = geoTransform[3] + ((yOff + pageStart + row + 0.5) * geoTransform[5]);

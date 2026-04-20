@@ -1,4 +1,4 @@
-﻿using NetTopologySuite.Features;
+using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using OSGeo.GDAL;
 using OSGeo.OSR;
@@ -90,6 +90,9 @@ public sealed class GDalContext : IDisposable {
 	/// <summary> Stores the raster extent envelope for quick rejection tests. </summary>  
 	private readonly Envelope _rasterExtent;
 
+	/// <summary> Guards all native GDAL calls that are not thread-safe (Open, ReadRaster). </summary>
+	public static readonly object GdalLock = new object();
+
 	public static void InitGdal() {
 		Gdal.SetConfigOption("GDAL_DATA", @"C:\OSGeo4W\share\gdal");
 		Gdal.SetConfigOption("PROJ_LIB", @"C:\OSGeo4W\share\proj");
@@ -102,7 +105,9 @@ public sealed class GDalContext : IDisposable {
 
 	/// <summary> Creates one worker-local processing context. </summary>  
 	public GDalContext(string vrtPath, HistogramSchema histogram, Epsg geoJsonEpsg = Epsg.Wgs84, Access access = Access.GA_ReadOnly) {
-		Dataset = Gdal.Open(vrtPath, access);
+		lock (GdalLock) {
+			Dataset = Gdal.Open(vrtPath, access);
+		}
 		if (Dataset == null) {
 			throw new InvalidOperationException("Could not open raster dataset: " + vrtPath);
 		}
@@ -161,7 +166,9 @@ public sealed class GDalContext : IDisposable {
 		var y = (int) Math.Round(py);
 		try {
 			buffer ??= new double[1];
-			Band.ReadRaster(x, y, 1, 1, buffer, 1, 1, 0, 0);
+			lock (GdalLock) {
+				Band.ReadRaster(x, y, 1, 1, buffer, 1, 1, 0, 0);
+			}
 			return buffer[0];
 		} catch (Exception e) {
 			Trace.TraceError(e + "");
