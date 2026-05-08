@@ -172,9 +172,9 @@ public static class GeoJsonHistogramEnricher {
 	/// <summary> Uses an existing VRT and writes compact histograms into the output GeoJSON </summary> 
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
-	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
+	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\Obsidian.SpocWeb\_Standards\Earth\Continent")]
-	//[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent\Europe\Europe~West\France")]
+	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\SpocWeb\_Standards\Earth\Continent\")]
 	public static void AddHistogram(string vrtElevationFile, string geoJsonDirectory
 		, Epsg geoJsonEpsg = Epsg.Wgs84, int parallelism = 0) {
 		var halfWidth = 25;
@@ -182,7 +182,7 @@ public static class GeoJsonHistogramEnricher {
 		double areaKM2 = EarthRadiusKM * EarthRadiusKM;
 		var dir = new DirectoryInfo(geoJsonDirectory);
 		var files = dir.EnumerateFiles(GeoJsonPattern, SearchOption.AllDirectories).ToList();
-		var effectiveParallelism = parallelism > 0 ? parallelism : Environment.ProcessorCount;
+		var effectiveParallelism = parallelism > 0 ? parallelism : 5 * Environment.ProcessorCount;
 		Parallel.ForEach(
 			files,
 			new ParallelOptions { MaxDegreeOfParallelism = effectiveParallelism },
@@ -298,8 +298,7 @@ public static class GeoJsonHistogramEnricher {
 
 		//ParallelOptions options = new ParallelOptions { MaxDegreeOfParallelism = effectiveMaxDegreeOfParallelism };
 		//var partitions = Partitioner.Create(0, features.Length, featureBatchSize);
-		//Parallel.ForEach(partitions, options, () =>
-		//(range, loopState, worker) => {
+		//Parallel.ForEach(partitions, options, () => //(range, loopState, worker) => {
 				//for (int index = range.Item1; index < range.Item2; index++) {
 				//	results[index] = worker.GetHistogram(features[index]);
 				//}
@@ -557,8 +556,7 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Clamps a latitude value into the valid geographic range. </summary>  
-	public static double ClampLatitudeDegrees(double latitudeDegrees) =>
-		latitudeDegrees > 90.0 ? 90.0 :
+	public static double ClampLatitudeDegrees(double latitudeDegrees) => latitudeDegrees > 90.0 ? 90.0 :
 		latitudeDegrees < -90.0 ? -90.0 : latitudeDegrees;
 
 	/// <summary> Computes the area-weighted histogram for a polygon in raster coordinates. </summary>  
@@ -591,7 +589,7 @@ public static class GeoJsonHistogramEnricher {
 		var histogramMaxM = schema.MaximumValue;
 		var bucketWidthM = schema.BucketWidth;
 		var bucketCount = schema.BucketCount;
-		var maxPageHeight = Math.Max(1, 8_388_608 / windowWidth); //stay below 64 MB
+		var maxPageHeight = Math.Max(1, 88_388_608 / windowWidth); //stay below 64 MB
 
 		for (var pageStart = 0; pageStart < windowHeight; pageStart += maxPageHeight) {
 			var message = DateTime.Now + ": " + pageStart + " of " + windowHeight + " for " + context;
