@@ -6,9 +6,8 @@ using Newtonsoft.Json.Linq;
 
 namespace org.SpocWeb.root.files.Tests.raster;
 
-/// <summary>
-/// 
-/// </summary>
+/// <summary>Adds elevation (Z) coordinates to every geometry in a GeoJSON file,<br/>
+/// reading height values from a GDAL raster model such as a Copernicus DEM VRT.</summary>
 /// <see cref="StreamingGeoJsonProcessor"/>
 public static class GeoJsonAddElevation {
 	public const string GeoJsonExtension = ".geoJson";

@@ -4,6 +4,8 @@ using NetTopologySuite.IO;
 
 namespace org.SpocWeb.root.files.Tests.raster;
 
+/// <summary>Low-memory streaming processor that adds elevation Z coordinates to GeoJSON FeatureCollections<br/>
+/// by reading and writing the JSON token-by-token without loading the entire document into memory.</summary>
 public static class StreamingGeoJsonProcessor {
 
 
