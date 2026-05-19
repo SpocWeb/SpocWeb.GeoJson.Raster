@@ -6,6 +6,13 @@ namespace org.SpocWeb.root.files.Tests.raster;
 
 /// <summary>Low-memory streaming processor that adds elevation Z coordinates to GeoJSON FeatureCollections<br/>
 /// by reading and writing the JSON token-by-token without loading the entire document into memory.</summary>
+/// <remarks>
+/// ## Meta
+/// pass: 2
+/// mtime: 2026-05-16T07:12:26Z
+/// digest: 5e2569cea31bf06736224b64215e0f8bf743332cf15f2b3f10d73b9b212de291
+/// updated: 2026-05-19
+/// </remarks>
 public static class StreamingGeoJsonProcessor {
 
 

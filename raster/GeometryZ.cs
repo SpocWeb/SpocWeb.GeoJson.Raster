@@ -3,6 +3,13 @@ using NetTopologySuite.Geometries;
 namespace org.SpocWeb.root.files.Tests.raster;
 
 /// <summary> Adds z-Component to a <see cref="Geometry"/> </summary>
+/// <remarks>
+/// ## Meta
+/// pass: 2
+/// mtime: 2026-04-18T14:41:04Z
+/// digest: 748286817e01994ab7231a86addf5d776442f03c95ca4f8ec034cacb079f929d
+/// updated: 2026-05-19
+/// </remarks>
 public static class GeometryZ {
 
 	public static GeometryFactory GeometryFactory = new();

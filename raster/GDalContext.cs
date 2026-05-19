@@ -5,10 +5,24 @@ using OSGeo.OSR;
 
 namespace org.SpocWeb.root.files.Tests.raster;
 
-/// <summary>  Holds one worker-local GDAL and coordinate-transformation context for safe parallel processing. </summary>  
+/// <summary>  Holds one worker-local GDAL and coordinate-transformation context for safe parallel processing. </summary>
+/// <remarks>
+/// ## Meta
+/// pass: 2
+/// mtime: 2026-04-20T16:33:28Z
+/// digest: dc2c111eaa794b356a1cad08948bb30fed2f2e2f0c90e9375caab34f268588a0
+/// updated: 2026-05-19
+/// </remarks>
 public sealed class GDalContext : IDisposable {
 
-	/// <summary> common EPSG coordinate reference system codes used by the application. </summary>  
+	/// <summary> common EPSG coordinate reference system codes used by the application. </summary>
+	/// <remarks>
+	/// ## Meta
+	/// pass: 2
+	/// mtime: 2026-04-20T16:33:28Z
+	/// digest: dc2c111eaa794b356a1cad08948bb30fed2f2e2f0c90e9375caab34f268588a0
+	/// updated: 2026-05-19
+	/// </remarks>
 	public enum Epsg {
 		/// <summary> Default: WGS 84 geographic coordinates in longitude and latitude. </summary> 
 		Wgs84 = 4326,

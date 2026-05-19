@@ -10,7 +10,14 @@ using OSGeo.GDAL;
 using OSGeo.OSR;
 using static GDalContext;
 
-/// <summary> (shared) histogram bin definition.  </summary>  
+/// <summary> (shared) histogram bin definition.  </summary>
+/// <remarks>
+/// ## Meta
+/// pass: 2
+/// mtime: 2026-05-04T19:51:06Z
+/// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
+/// updated: 2026-05-19
+/// </remarks>
 public sealed class HistogramBin {
 
 	/// <summary> zero-based index of this bin. </summary>  
@@ -37,7 +44,14 @@ public sealed class HistogramBin {
 	public override string ToString() => Label;
 }
 
-/// <summary> shared histogram schema used by all features. </summary>  
+/// <summary> shared histogram schema used by all features. </summary>
+/// <remarks>
+/// ## Meta
+/// pass: 2
+/// mtime: 2026-05-04T19:51:06Z
+/// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
+/// updated: 2026-05-19
+/// </remarks>
 public sealed class HistogramSchema {
 
 	/// <summary> identifier that links features to this schema. </summary>  
@@ -72,6 +86,13 @@ public sealed class HistogramSchema {
 }
 
 /// <inheritdoc cref="CreateFromRange(string, double, double, int, int)"/>
+/// <remarks>
+/// ## Meta
+/// pass: 2
+/// mtime: 2026-05-04T19:51:06Z
+/// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
+/// updated: 2026-05-19
+/// </remarks>
 public static class HistogramSchemaFactory {
 
 	/// <summary>  Creates shared histogram schema definitions. </summary>
@@ -160,7 +181,14 @@ public static class HistogramSchemaFactory {
 	}
 }
 
-/// <summary> Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory. </summary>  
+/// <summary> Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory. </summary>
+/// <remarks>
+/// ## Meta
+/// pass: 2
+/// mtime: 2026-05-04T19:51:06Z
+/// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
+/// updated: 2026-05-19
+/// </remarks>
 public static class GeoJsonHistogramEnricher {
 
 	public const string GeoJsonExtension = ".geoJson";

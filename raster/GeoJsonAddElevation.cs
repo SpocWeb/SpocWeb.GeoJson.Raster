@@ -8,7 +8,15 @@ namespace org.SpocWeb.root.files.Tests.raster;
 
 /// <summary>Adds elevation (Z) coordinates to every geometry in a GeoJSON file,<br/>
 /// reading height values from a GDAL raster model such as a Copernicus DEM VRT.</summary>
+/// <remarks>
 /// <see cref="StreamingGeoJsonProcessor"/>
+///
+/// ## Meta
+/// pass: 2
+/// mtime: 2026-05-16T07:12:22Z
+/// digest: 0f6a243ef484d835e4f85a9818515c4f8d14061e91e82aff94546b2b55fa4684
+/// updated: 2026-05-19
+/// </remarks>
 public static class GeoJsonAddElevation {
 	public const string GeoJsonExtension = ".geoJson";
 	public const string GeoJsonPattern = "*" + GeoJsonExtension;
