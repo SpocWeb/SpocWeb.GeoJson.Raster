@@ -18,7 +18,9 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// updated: 2026-05-19
 /// </remarks>
 public static class GeoJsonAddElevation {
+	/// <summary>Specifies the constant geo Json Extension.</summary>
 	public const string GeoJsonExtension = ".geoJson";
+	/// <summary>Specifies the constant geo Json Pattern.</summary>
 	public const string GeoJsonPattern = "*" + GeoJsonExtension;
 
 	public static JsonSerializerSettings SerializerSettings = new() {
@@ -57,6 +59,7 @@ public static class GeoJsonAddElevation {
 		}
 	}
 
+	/// <inheritdoc cref="AddElevationAsZ(string, string)"/>
 	public static void AddElevationAsZ(this GDalContext elevationModel, FileInfo inputPath, string outputPath) {//y, int parallelism = 80) {
 		//var options = new ParallelOptions { MaxDegreeOfParallelism = parallelism };
 
@@ -97,7 +100,8 @@ public static class GeoJsonAddElevation {
 		}
 	}
 
-	static string SerializeElevatedFeature(GDalContext elevationModel, JToken feature) {
+	/// <summary>TODO: LLM</summary>
+ 	static string SerializeElevatedFeature(GDalContext elevationModel, JToken feature) {
 		var geometryElement = feature["geometry"];
 		var geomZ = geometryElement == null || geometryElement.Type == JTokenType.Null
 			? null
@@ -108,50 +112,61 @@ public static class GeoJsonAddElevation {
 		return $"{{\"type\":\"Feature\",\"properties\":{propertiesJson},\n\"geometry\":{geomJson}}}";
 	}
 
+	/// <summary>Gets the geo Json Serializer3 D.</summary>
 	public static readonly JsonSerializer GeoJsonSerializer3D
 		= GeoJsonSerializer.Create(SerializerSettings, GeometryZ.GeometryFactory, 3);
 
-	public static T GeoJsonDeserialize<T>(string json) {
+	/// <summary>TODO: LLM</summary>
+ 	public static T GeoJsonDeserialize<T>(string json) {
 		using TextReader sr = new StringReader(json);
 		return GeoJsonDeserialize<T>(sr);
 	}
 
+	/// <inheritdoc cref="GeoJsonDeserialize(string)"/>
 	public static T GeoJsonDeserialize<T>(this FileInfo geoJsonPath) {
 		using var sr = new StreamReader(geoJsonPath.FullName);
 		return GeoJsonDeserialize<T>(sr);
 	}
 
+	/// <inheritdoc cref="GeoJsonDeserialize(string)"/>
 	public static T GeoJsonDeserialize<T>(this TextReader sr) {
 		using var jr = new JsonTextReader(sr);
 		return GeoJsonDeserialize<T>(jr);
 	}
 
+	/// <inheritdoc cref="GeoJsonDeserialize(string)"/>
 	public static T GeoJsonDeserialize<T>(this JsonTextReader jr) => GeoJsonSerializer3D.Deserialize<T>(jr)!;
 
-	public static string GeoJsonSerialize(this Geometry geoJson, int indentation = 2, string newLine = "\n")
+	/// <summary>TODO: LLM</summary>
+ 	public static string GeoJsonSerialize(this Geometry geoJson, int indentation = 2, string newLine = "\n")
 		=> new StringBuilder().GeoJsonSerialize(geoJson, indentation, newLine).ToString();
 
+	/// <inheritdoc cref="GeoJsonSerialize(Geometry, int, string)"/>
 	public static StringBuilder GeoJsonSerialize(this StringBuilder sb, object geoJson, int indentation = 2, string newLine = "\n") {
 		using var writer = sb.CreateJsonWriter(indentation, newLine);
 		GeoJsonSerializer3D.Serialize(writer, geoJson);
 		return sb;
 	}
 
+	/// <inheritdoc cref="GeoJsonSerialize(Geometry, int, string)"/>
 	public static void GeoJsonSerialize(this FileInfo geoJsonPath, object geoJson, int indentation = 2, string newLine = "\n") {
 		using var sw = new StreamWriter(geoJsonPath.FullName) { NewLine = newLine };
 		GeoJsonSerialize(sw, geoJson, indentation);
 	}
 
+	/// <inheritdoc cref="GeoJsonSerialize(Geometry, int, string)"/>
 	public static void GeoJsonSerialize(this TextWriter writer, object geoJson, int indentation = 2) {
 		using var jsonWriter = writer.CreateJsonWriter(indentation);
 		GeoJsonSerializer3D.Serialize(jsonWriter, geoJson);
 	}
 
+	/// <inheritdoc cref="CreateJsonWriter(TextWriter, int)"/>
 	public static JsonTextWriter CreateJsonWriter(this StringBuilder sb, int indentation = 2, string newLine = "\n")
 		=> new StringWriter(sb) { NewLine = newLine, }.CreateJsonWriter(indentation);
 
 
-	public static JsonTextWriter CreateJsonWriter(this TextWriter sb, int indentation = 2)
+	/// <summary>TODO: LLM</summary>
+ 	public static JsonTextWriter CreateJsonWriter(this TextWriter sb, int indentation = 2)
 		=> new JsonTextWriter(sb) {
 			Formatting = Formatting.Indented,
 			Indentation = indentation

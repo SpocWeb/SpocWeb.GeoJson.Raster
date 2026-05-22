@@ -41,6 +41,7 @@ public sealed class HistogramBin {
 	/// <summary> human-readable label for this bin. </summary>  
 	public string Label { get; set; }
 
+	/// <inheritdoc />
 	public override string ToString() => Label;
 }
 
@@ -191,6 +192,7 @@ public static class HistogramSchemaFactory {
 /// </remarks>
 public static class GeoJsonHistogramEnricher {
 
+	/// <summary>Specifies the constant geo Json Pattern.</summary>
 	public const string GeoJsonExtension = ".geoJson";
 	public const string GeoJsonPattern = "*" + GeoJsonExtension;
 

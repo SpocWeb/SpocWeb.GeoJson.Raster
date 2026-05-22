@@ -1,4 +1,4 @@
-﻿namespace org.SpocWeb.root.files.Tests;
+namespace org.SpocWeb.root.files.Tests;
 
 /// <summary> Entry point placeholder for the SpocWeb.GeoJson.Raster test project. </summary>
 /// <remarks>
@@ -10,6 +10,7 @@
 /// </remarks>
 public class Program
 {
-	public static void Main(string[] args) {
+	/// <summary>TODO: LLM</summary>
+ 	public static void Main(string[] args) {
 	}
 }
