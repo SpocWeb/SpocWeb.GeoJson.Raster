@@ -194,6 +194,7 @@ public static class GeoJsonHistogramEnricher {
 
 	/// <summary>Specifies the constant geo Json Pattern.</summary>
 	public const string GeoJsonExtension = ".geoJson";
+	/// <summary>Specifies the constant geo Json Pattern.</summary>
 	public const string GeoJsonPattern = "*" + GeoJsonExtension;
 
 	/// <summary> Mean Earth radius used by the spherical pixel-area approximation. </summary>  
@@ -298,6 +299,7 @@ public static class GeoJsonHistogramEnricher {
 		return true;
 	}
 
+	/// <summary>TODO: LLM</summary>
 	public static decimal Round(this double value, int digits) {
 		var pow10 = Math.Pow(10, -digits);
 		var result = Math.Round(value / pow10, 0, MidpointRounding.AwayFromZero) * pow10;
@@ -544,6 +546,7 @@ public static class GeoJsonHistogramEnricher {
 		return geometryFactory.CreateLinearRing(target);
 	}
 
+	/// <summary>TODO: LLM</summary>
 	public static void ToArray(this Coordinate coordinate, double[] point) {
 		if (point.Length > 2)
 			point[2] = coordinate.Z;
@@ -570,6 +573,7 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 
+	/// <summary>Specifies the constant rad Per Degree.</summary>
 	private const double RadPerDegree = Math.PI / 180.0;
 
 	/// <summary> geographic ground area of one raster cell row element in rad². </summary>  
