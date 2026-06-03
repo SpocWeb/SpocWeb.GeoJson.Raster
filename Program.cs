@@ -10,7 +10,7 @@ namespace org.SpocWeb.root.files.Tests;
 /// </remarks>
 public class Program
 {
-	/// <summary>TODO: LLM</summary>
- 	public static void Main(string[] args) {
+	/// <summary> Application entry point; no operations are performed at startup. </summary>
+	public static void Main(string[] args) {
 	}
 }

@@ -16,7 +16,7 @@ namespace org.SpocWeb.root.files.Tests.raster;
 public static class StreamingGeoJsonProcessor {
 
 
-	/// <summary>TODO: LLM</summary>
+	/// <summary> Adds elevation Z coordinates to all GeoJSON files found under <paramref name="geoJsonPath"/> using the VRT at <paramref name="vrtPath"/>. </summary>
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\SpocWeb\_Standards\Earth\Continent\Europe\Europe~Central\Germany\Germany~West\Hessen\counties~Hessen")]
 	public static void StreamGeoJsonProcessor(string vrtPath, string geoJsonPath) {
 		var gf = new GeometryFactory();
@@ -26,7 +26,7 @@ public static class StreamingGeoJsonProcessor {
 		}
 	}
 
-	/// <summary>TODO: LLM</summary>
+	/// <summary> Verifies that a <see cref="GeometryFactory"/> can be constructed without exceptions. </summary>
 	[Test]
 	public static void TestGeometryFactory() {
 		try {
@@ -36,8 +36,8 @@ public static class StreamingGeoJsonProcessor {
 		}
 	}
 
-	/// <summary>TODO: LLM</summary>
- 	public static void ProcessFile(this GDalContext elevationModel, string inputPath, string outputPath) {
+	/// <summary> Streams the GeoJSON at <paramref name="inputPath"/>, enriches each feature with elevation Z, and writes the result to <paramref name="outputPath"/>. </summary>
+	public static void ProcessFile(this GDalContext elevationModel, string inputPath, string outputPath) {
 		using var fs = File.OpenRead(inputPath);
 		var reader = new Utf8JsonReader(ReadAllBytes(fs), isFinalBlock: true, state: default);
 
@@ -91,16 +91,16 @@ public static class StreamingGeoJsonProcessor {
 		writer.WriteEndObject();
 	}
 
-	/// <summary>TODO: LLM</summary>
- 	private static byte[] ReadAllBytes(Stream stream) {
+	/// <summary> Reads all bytes from <paramref name="stream"/> into a new array. </summary>
+	private static byte[] ReadAllBytes(Stream stream) {
 		using var ms = new MemoryStream();
 		stream.CopyTo(ms);
 		return ms.ToArray();
 	}
 
 	// Extract one JSON object (feature) without full parsing
-	/// <summary>TODO: LLM</summary>
- 	private static byte[] ReadRawJson(ref Utf8JsonReader reader) {
+	/// <summary> Extracts the raw bytes of the next complete JSON object from <paramref name="reader"/> without fully parsing it. </summary>
+	private static byte[] ReadRawJson(ref Utf8JsonReader reader) {
 		using var ms = new MemoryStream();
 		using var writer = new Utf8JsonWriter(ms);
 
@@ -118,7 +118,7 @@ public static class StreamingGeoJsonProcessor {
 		return ms.ToArray();
 	}
 
-	/// <summary>TODO: LLM</summary>
+	/// <summary> Writes the current token from <paramref name="reader"/> to <paramref name="writer"/>. </summary>
 	static void WriteToken(this Utf8JsonWriter writer, ref Utf8JsonReader reader) {
 		switch (reader.TokenType) {
 			case JsonTokenType.StartObject:

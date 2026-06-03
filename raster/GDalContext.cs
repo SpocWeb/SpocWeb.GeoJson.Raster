@@ -107,7 +107,7 @@ public sealed class GDalContext : IDisposable {
 	/// <summary> Guards all native GDAL calls that are not thread-safe (Open, ReadRaster). </summary>
 	public static readonly object GdalLock = new object();
 
-	/// <summary>TODO: LLM</summary>
+	/// <summary> Registers all GDAL drivers and sets the GDAL_DATA and PROJ_LIB configuration paths. </summary>
 	public static void InitGdal() {
 		Gdal.SetConfigOption("GDAL_DATA", @"C:\OSGeo4W\share\gdal");
 		Gdal.SetConfigOption("PROJ_LIB", @"C:\OSGeo4W\share\proj");
@@ -169,14 +169,14 @@ public sealed class GDalContext : IDisposable {
 
 	/// <summary> Creates an empty histogram-count array for one feature. </summary> 
 	private static long[] CreateEmptyCounts(int bucketCount) => new long[bucketCount];
-	/// <summary>TODO: LLM</summary>
- 	private static double[] CreateEmptyAreas(int bucketCount) => new double[bucketCount];
+	/// <summary> Creates an empty area-sum array for one feature. </summary>
+	private static double[] CreateEmptyAreas(int bucketCount) => new double[bucketCount];
 
 	[ThreadStatic]
 	static double[] buffer;
 
-	/// <summary>TODO: LLM</summary>
- 	public double Sample(double lon, double lat) {
+	/// <summary> Reads the raster value at the given geographic <paramref name="lon"/>/<paramref name="lat"/> coordinates. </summary>
+	public double Sample(double lon, double lat) {
 		double px = (lon - _GeoTransformMatrix[0]) / _GeoTransformMatrix[1]; //assumes no Rotation
 		double py = (lat - _GeoTransformMatrix[3]) / _GeoTransformMatrix[5];
 

@@ -100,8 +100,8 @@ public static class GeoJsonAddElevation {
 		}
 	}
 
-	/// <summary>TODO: LLM</summary>
- 	static string SerializeElevatedFeature(GDalContext elevationModel, JToken feature) {
+	/// <summary> Adds elevation Z to the geometry of <paramref name="feature"/> and returns the serialized GeoJSON Feature string. </summary>
+	static string SerializeElevatedFeature(GDalContext elevationModel, JToken feature) {
 		var geometryElement = feature["geometry"];
 		var geomZ = geometryElement == null || geometryElement.Type == JTokenType.Null
 			? null
@@ -116,8 +116,8 @@ public static class GeoJsonAddElevation {
 	public static readonly JsonSerializer GeoJsonSerializer3D
 		= GeoJsonSerializer.Create(SerializerSettings, GeometryZ.GeometryFactory, 3);
 
-	/// <summary>TODO: LLM</summary>
- 	public static T GeoJsonDeserialize<T>(string json) {
+	/// <summary> Deserializes a GeoJSON string into a <typeparamref name="T"/> instance using <see cref="GeoJsonSerializer3D"/>. </summary>
+	public static T GeoJsonDeserialize<T>(string json) {
 		using TextReader sr = new StringReader(json);
 		return GeoJsonDeserialize<T>(sr);
 	}
@@ -137,8 +137,8 @@ public static class GeoJsonAddElevation {
 	/// <inheritdoc cref="GeoJsonDeserialize(string)"/>
 	public static T GeoJsonDeserialize<T>(this JsonTextReader jr) => GeoJsonSerializer3D.Deserialize<T>(jr)!;
 
-	/// <summary>TODO: LLM</summary>
- 	public static string GeoJsonSerialize(this Geometry geoJson, int indentation = 2, string newLine = "\n")
+	/// <summary> Serializes <paramref name="geoJson"/> to an indented GeoJSON string using <see cref="GeoJsonSerializer3D"/>. </summary>
+	public static string GeoJsonSerialize(this Geometry geoJson, int indentation = 2, string newLine = "\n")
 		=> new StringBuilder().GeoJsonSerialize(geoJson, indentation, newLine).ToString();
 
 	/// <inheritdoc cref="GeoJsonSerialize(Geometry, int, string)"/>
@@ -165,8 +165,8 @@ public static class GeoJsonAddElevation {
 		=> new StringWriter(sb) { NewLine = newLine, }.CreateJsonWriter(indentation);
 
 
-	/// <summary>TODO: LLM</summary>
- 	public static JsonTextWriter CreateJsonWriter(this TextWriter sb, int indentation = 2)
+	/// <summary> Creates an indented <see cref="JsonTextWriter"/> wrapping <paramref name="sb"/>. </summary>
+	public static JsonTextWriter CreateJsonWriter(this TextWriter sb, int indentation = 2)
 		=> new JsonTextWriter(sb) {
 			Formatting = Formatting.Indented,
 			Indentation = indentation

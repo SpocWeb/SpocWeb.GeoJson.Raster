@@ -299,7 +299,7 @@ public static class GeoJsonHistogramEnricher {
 		return true;
 	}
 
-	/// <summary>TODO: LLM</summary>
+	/// <summary> Rounds <paramref name="value"/> to the given number of decimal <paramref name="digits"/> using away-from-zero midpoint rounding, returned as <see cref="decimal"/>. </summary>
 	public static decimal Round(this double value, int digits) {
 		var pow10 = Math.Pow(10, -digits);
 		var result = Math.Round(value / pow10, 0, MidpointRounding.AwayFromZero) * pow10;
@@ -546,7 +546,7 @@ public static class GeoJsonHistogramEnricher {
 		return geometryFactory.CreateLinearRing(target);
 	}
 
-	/// <summary>TODO: LLM</summary>
+	/// <summary> Copies the X, Y (and optionally Z) components of <paramref name="coordinate"/> into <paramref name="point"/>. </summary>
 	public static void ToArray(this Coordinate coordinate, double[] point) {
 		if (point.Length > 2)
 			point[2] = coordinate.Z;
