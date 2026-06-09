@@ -18,6 +18,13 @@ using static GDalContext;
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
+/// <example>
+/// <code language="yaml">
+/// pass: 2
+/// mtime: 2026-06-03T19:25:08Z
+/// digest: 9bbda65e43164d84c53064634085f069774ae6079d0a0eec2db7b8eaab158e2a
+/// </code>
+/// </example>
 public sealed class HistogramBin {
 
 	/// <summary> zero-based index of this bin. </summary>  
@@ -53,6 +60,13 @@ public sealed class HistogramBin {
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
+/// <example>
+/// <code language="yaml">
+/// pass: 2
+/// mtime: 2026-06-03T19:25:08Z
+/// digest: edc3fe8bcc6412f74cb7d711b7b1783b23d2473a53fd1fe83684244f22b2d023
+/// </code>
+/// </example>
 public sealed class HistogramSchema {
 
 	/// <summary> identifier that links features to this schema. </summary>  
@@ -94,6 +108,13 @@ public sealed class HistogramSchema {
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
+/// <example>
+/// <code language="yaml">
+/// pass: 2
+/// mtime: 2026-06-03T19:25:08Z
+/// digest: bfe761ccdca398e6e43f2ecbdab9e10dd8f42136b479b23a086aaf33adcacfc7
+/// </code>
+/// </example>
 public static class HistogramSchemaFactory {
 
 	/// <summary>  Creates shared histogram schema definitions. </summary>
@@ -190,6 +211,13 @@ public static class HistogramSchemaFactory {
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
+/// <example>
+/// <code language="yaml">
+/// pass: 2
+/// mtime: 2026-06-03T19:25:08Z
+/// digest: 4ca284e0bb778ec17b33ab031b3d877c911a0ced1f6674ebda2f1ce23649c803
+/// </code>
+/// </example>
 public static class GeoJsonHistogramEnricher {
 
 	/// <summary>Specifies the constant geo Json Pattern.</summary>

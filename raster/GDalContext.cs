@@ -13,6 +13,13 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: dc2c111eaa794b356a1cad08948bb30fed2f2e2f0c90e9375caab34f268588a0
 /// updated: 2026-05-19
 /// </remarks>
+/// <example>
+/// <code language="yaml">
+/// pass: 2
+/// mtime: 2026-06-03T19:23:47Z
+/// digest: 94d99b71600bffef06ce57fb2054ad0062256bcf463c4e353e0cabcb52b53d93
+/// </code>
+/// </example>
 public sealed class GDalContext : IDisposable {
 
 	/// <summary> common EPSG coordinate reference system codes used by the application. </summary>
@@ -23,6 +30,13 @@ public sealed class GDalContext : IDisposable {
 	/// digest: dc2c111eaa794b356a1cad08948bb30fed2f2e2f0c90e9375caab34f268588a0
 	/// updated: 2026-05-19
 	/// </remarks>
+	/// <example>
+	/// <code language="yaml">
+	/// pass: 2
+	/// mtime: 2026-06-03T19:23:47Z
+	/// digest: f0b059edf4ecd00201a29f3f5dbb2243d34afb26183f7817d9f98a8f66eab7cc
+	/// </code>
+	/// </example>
 	public enum Epsg {
 		/// <summary> Default: WGS 84 geographic coordinates in longitude and latitude. </summary> 
 		Wgs84 = 4326,

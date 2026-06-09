@@ -10,6 +10,13 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: 748286817e01994ab7231a86addf5d776442f03c95ca4f8ec034cacb079f929d
 /// updated: 2026-05-19
 /// </remarks>
+/// <example>
+/// <code language="yaml">
+/// pass: 2
+/// mtime: 2026-05-19T14:23:36Z
+/// digest: 614d471a784aba104c9923263832b3f0d34646572a31bf8e501e2fbf68cbb08d
+/// </code>
+/// </example>
 public static class GeometryZ {
 
 	public static GeometryFactory GeometryFactory = new();

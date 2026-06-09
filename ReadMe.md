@@ -1,3 +1,11 @@
+---
+digest:
+  local-classes:
+    Program:
+      mtime: "2026-06-09T16:04:44Z"
+      digest: "e1623107bf1d964a526b588adc259035fbc65d746201544be5e5926fddd0dbb9"
+  folders: {}
+---
 # SpocWeb.GeoJson.Raster
 
 <!-- digest-map
@@ -21,18 +29,44 @@ Adds elevation information from Digital Elevation Models (DEM) to GeoJSON files,
 and computes per-feature elevation histograms using GDAL raster datasets
 such as the Copernicus DEM VRT.
 
+## Architecture
+
+```mermaid
+flowchart TD
+    subgraph Entry
+        Program["Program\n(entry-point placeholder)"]
+    end
+
+    subgraph raster["raster/ subsystem"]
+        GDal["GDalContext\n(GDAL dataset + band + transform)"]
+        Epsg["Epsg\n(EPSG CRS codes)"]
+        AddElev["GeoJsonAddElevation\n(batch Z enrichment)"]
+        Stream["StreamingGeoJsonProcessor\n(token-by-token Z enrichment)"]
+        GeomZ["GeometryZ\n(geometry extension methods)"]
+        Enrich["GeoJsonHistogramEnricher\n(per-feature histogram)"]
+        Schema["HistogramSchema\n(bin definitions)"]
+        Factory["HistogramSchemaFactory\n(schema builder)"]
+        Bin["HistogramBin\n(single bin definition)"]
+    end
+
+    AddElev -->|"samples via"| GDal
+    Stream -->|"samples via"| GDal
+    GeomZ -->|"samples via"| GDal
+    Enrich -->|"samples via"| GDal
+    Enrich -->|"uses schema"| Schema
+
+    linkStyle 4 opacity:1
+
+    Factory -->|"creates"| Schema
+    Schema -->|"contains"| Bin
+    GDal -->|"uses codes from"| Epsg
+```
+
 ## Classes
 
-| Class | Responsibility | Key Collaborators |
-|---|---|---|
-| `GDalContext` | Worker-local GDAL and coordinate-transformation context for safe parallel raster sampling. | `GeometryZ`, `GeoJsonHistogramEnricher`, `GeoJsonAddElevation` |
-| `GeoJsonAddElevation` | Adds elevation Z coordinates to every geometry in a GeoJSON file using a GDAL raster model. | `GDalContext`, `GeometryZ` |
-| `StreamingGeoJsonProcessor` | Low-memory streaming processor that adds Z coordinates to GeoJSON FeatureCollections token-by-token. | `GDalContext`, `GeometryZ` |
-| `GeometryZ` | Extension methods that add the Z dimension from an elevation model to any `NetTopologySuite` geometry type. | `GDalContext` |
-| `HistogramBin` | Value record describing one bin of a histogram (index, min/max values, label). | `HistogramSchema` |
-| `HistogramSchema` | Shared histogram bin definition shared across all features in a processing run. | `GeoJsonHistogramEnricher` |
-| `HistogramSchemaFactory` | Creates `HistogramSchema` instances from a range or a width specification. | `HistogramSchema` |
-| `GeoJsonHistogramEnricher` | Enriches GeoJSON polygon features with compact per-feature elevation histograms derived from a DEM VRT. | `GDalContext`, `HistogramSchema` |
+| Class | Responsibility |
+|---|---|
+| [Program](Program.cs) | Entry point placeholder for the SpocWeb. |
 
 ## Relationships
 
@@ -128,3 +162,9 @@ and is shared across all parallel workers.
 - [Copernicus DEM](https://spacedata.copernicus.eu/collections/copernicus-digital-elevation-model) — elevation model used in the test cases.
 - [NetTopologySuite](https://github.com/NetTopologySuite/NetTopologySuite) — .NET geometry library used for all spatial operations.
 - [OSGeo.GDAL NuGet](https://www.nuget.org/packages/GDAL) — managed bindings to GDAL/OGR/OSR.
+
+## Subsystems
+
+| Folder | Domain Role |
+|---|---|
+| [`raster/`](raster/ReadMe.md) | GDAL-backed raster processing classes for elevation enrichment and histogram computation. |

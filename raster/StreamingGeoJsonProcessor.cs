@@ -13,6 +13,13 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: 5e2569cea31bf06736224b64215e0f8bf743332cf15f2b3f10d73b9b212de291
 /// updated: 2026-05-19
 /// </remarks>
+/// <example>
+/// <code language="yaml">
+/// pass: 2
+/// mtime: 2026-06-03T19:24:55Z
+/// digest: ec6b0e56b414e0d88def3631b0599d4b8e5926f7f43037b56bc47d561860ce7e
+/// </code>
+/// </example>
 public static class StreamingGeoJsonProcessor {
 
 

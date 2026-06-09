@@ -17,6 +17,13 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: 0f6a243ef484d835e4f85a9818515c4f8d14061e91e82aff94546b2b55fa4684
 /// updated: 2026-05-19
 /// </remarks>
+/// <example>
+/// <code language="yaml">
+/// pass: 2
+/// mtime: 2026-06-03T19:24:10Z
+/// digest: e3d5aee25c27ec0452573f504d6449f46d05d59b0da14aae5142698b658872d3
+/// </code>
+/// </example>
 public static class GeoJsonAddElevation {
 	/// <summary>Specifies the constant geo Json Extension.</summary>
 	public const string GeoJsonExtension = ".geoJson";
