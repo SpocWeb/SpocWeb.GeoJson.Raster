@@ -21,7 +21,8 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// <code language="yaml">
 /// pass: 2
 /// mtime: 2026-06-03T19:24:10Z
-/// digest: e3d5aee25c27ec0452573f504d6449f46d05d59b0da14aae5142698b658872d3
+/// digest: 4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558
+/// stale: true
 /// </code>
 /// </example>
 public static class GeoJsonAddElevation {

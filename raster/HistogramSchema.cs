@@ -113,6 +113,7 @@ public sealed class HistogramSchema {
 /// pass: 2
 /// mtime: 2026-06-03T19:25:08Z
 /// digest: bfe761ccdca398e6e43f2ecbdab9e10dd8f42136b479b23a086aaf33adcacfc7
+/// stale: true
 /// </code>
 /// </example>
 public static class HistogramSchemaFactory {
