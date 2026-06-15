@@ -7,7 +7,8 @@ using Newtonsoft.Json.Linq;
 namespace org.SpocWeb.root.files.Tests.raster;
 
 /// <summary>Adds elevation (Z) coordinates to every geometry in a GeoJSON file,<br/>
-/// reading height values from a GDAL raster model such as a Copernicus DEM VRT.</summary>
+/// reading height values from a GDAL raster model such as a Copernicus DEM VRT.<br/>
+/// Specifies the constant geo Json Extension.</summary>
 /// <remarks>
 /// <see cref="StreamingGeoJsonProcessor"/>
 ///
@@ -22,7 +23,6 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// pass: 2
 /// mtime: 2026-06-03T19:24:10Z
 /// digest: 4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558
-/// stale: true
 /// </code>
 /// </example>
 public static class GeoJsonAddElevation {

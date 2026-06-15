@@ -221,7 +221,8 @@ public static class HistogramSchemaFactory {
 /// </example>
 public static class GeoJsonHistogramEnricher {
 
-	/// <summary>Specifies the constant geo Json Pattern.</summary>
+	/// <summary>Specifies the constant geo Json Pattern.<br/>
+	/// Specifies the constant geo Json Pattern.</summary>
 	public const string GeoJsonExtension = ".geoJson";
 	/// <summary>Specifies the constant geo Json Pattern.</summary>
 	public const string GeoJsonPattern = "*" + GeoJsonExtension;

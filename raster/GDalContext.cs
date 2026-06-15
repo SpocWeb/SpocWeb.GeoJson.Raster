@@ -17,12 +17,14 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// <code language="yaml">
 /// pass: 2
 /// mtime: 2026-06-03T19:23:47Z
-/// digest: 94d99b71600bffef06ce57fb2054ad0062256bcf463c4e353e0cabcb52b53d93
+/// digest: b148f6976d8f56fe47232dc6cb3bba8c17bc765f7de78ceabb70fe784d1b51af
+/// stale: true
 /// </code>
 /// </example>
 public sealed class GDalContext : IDisposable {
 
-	/// <summary> common EPSG coordinate reference system codes used by the application. </summary>
+	/// <summary>common EPSG coordinate reference system codes used by the application.<br/>
+	/// Default: WGS 84 geographic coordinates in longitude and latitude.</summary>
 	/// <remarks>
 	/// ## Meta
 	/// pass: 2
@@ -35,10 +37,13 @@ public sealed class GDalContext : IDisposable {
 	/// pass: 2
 	/// mtime: 2026-06-03T19:23:47Z
 	/// digest: f0b059edf4ecd00201a29f3f5dbb2243d34afb26183f7817d9f98a8f66eab7cc
+	/// digest: f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239
+	/// stale: true
+	/// digest: f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239
 	/// </code>
 	/// </example>
 	public enum Epsg {
-		/// <summary> Default: WGS 84 geographic coordinates in longitude and latitude. </summary> 
+		/// <summary>Represents wgs84.</summary>
 		Wgs84 = 4326,
 
 		/// <summary> Web Mercator projected coordinates. </summary> 
@@ -181,9 +186,9 @@ public sealed class GDalContext : IDisposable {
 		_rasterExtent = Dataset.CreateRasterExtentEnvelope(_GeoTransformMatrix);
 	}
 
-	/// <summary> Creates an empty histogram-count array for one feature. </summary> 
+	/// <summary>Creates an empty histogram-count array for one feature.</summary>
 	private static long[] CreateEmptyCounts(int bucketCount) => new long[bucketCount];
-	/// <summary> Creates an empty area-sum array for one feature. </summary>
+	/// <summary>Creates an empty area-sum array sized to <paramref name="bucketCount"/> bins for one feature.</summary>
 	private static double[] CreateEmptyAreas(int bucketCount) => new double[bucketCount];
 
 	[ThreadStatic]
