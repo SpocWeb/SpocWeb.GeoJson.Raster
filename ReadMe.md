@@ -18,19 +18,29 @@ such as the Copernicus DEM VRT.
 ```mermaid
 flowchart TD
     subgraph Entry
-        Program["Program\n(entry-point placeholder)"]
+        Program["Program
+    (entry-point placeholder)"]
     end
 
     subgraph raster["raster/ subsystem"]
-        GDal["GDalContext\n(GDAL dataset + band + transform)"]
-        Epsg["Epsg\n(EPSG CRS codes)"]
-        AddElev["GeoJsonAddElevation\n(batch Z enrichment)"]
-        Stream["StreamingGeoJsonProcessor\n(token-by-token Z enrichment)"]
-        GeomZ["GeometryZ\n(geometry extension methods)"]
-        Enrich["GeoJsonHistogramEnricher\n(per-feature histogram)"]
-        Schema["HistogramSchema\n(bin definitions)"]
-        Factory["HistogramSchemaFactory\n(schema builder)"]
-        Bin["HistogramBin\n(single bin definition)"]
+        GDal["GDalContext
+    (GDAL dataset + band + transform)"]
+        Epsg["Epsg
+    (EPSG CRS codes)"]
+        AddElev["GeoJsonAddElevation
+    (batch Z enrichment)"]
+        Stream["StreamingGeoJsonProcessor
+    (token-by-token Z enrichment)"]
+        GeomZ["GeometryZ
+    (geometry extension methods)"]
+        Enrich["GeoJsonHistogramEnricher
+    (per-feature histogram)"]
+        Schema["HistogramSchema
+    (bin definitions)"]
+        Factory["HistogramSchemaFactory
+    (schema builder)"]
+        Bin["HistogramBin
+    (single bin definition)"]
     end
 
     AddElev -->|"samples via"| GDal

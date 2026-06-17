@@ -18,7 +18,6 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// pass: 2
 /// mtime: 2026-06-03T19:23:47Z
 /// digest: b148f6976d8f56fe47232dc6cb3bba8c17bc765f7de78ceabb70fe784d1b51af
-/// stale: true
 /// </code>
 /// </example>
 public sealed class GDalContext : IDisposable {
@@ -39,6 +38,7 @@ public sealed class GDalContext : IDisposable {
 	/// digest: f0b059edf4ecd00201a29f3f5dbb2243d34afb26183f7817d9f98a8f66eab7cc
 	/// digest: f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239
 	/// stale: true
+	/// digest: f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239
 	/// digest: f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239
 	/// </code>
 	/// </example>

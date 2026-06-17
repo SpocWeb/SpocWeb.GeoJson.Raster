@@ -40,21 +40,30 @@ All classes reside in the `org.SpocWeb.root.files.Tests.raster` namespace.
 ```mermaid
 flowchart TD
     subgraph Context
-        GDal["GDalContext\n(worker-local GDAL + OSR transform)"]
-        Epsg["Epsg\n(EPSG CRS constants)"]
+        GDal["GDalContext
+    (worker-local GDAL + OSR transform)"]
+        Epsg["Epsg
+    (EPSG CRS constants)"]
     end
 
     subgraph Elevation
-        AddElev["GeoJsonAddElevation\n(batch file Z enrichment)"]
-        Stream["StreamingGeoJsonProcessor\n(token-by-token Z enrichment)"]
-        GeomZ["GeometryZ\n(NTS geometry extension methods)"]
+        AddElev["GeoJsonAddElevation
+    (batch file Z enrichment)"]
+        Stream["StreamingGeoJsonProcessor
+    (token-by-token Z enrichment)"]
+        GeomZ["GeometryZ
+    (NTS geometry extension methods)"]
     end
 
     subgraph Histogram
-        Factory["HistogramSchemaFactory\n(creates HistogramSchema)"]
-        Schema["HistogramSchema\n(shared bin definitions)"]
-        Bin["HistogramBin\n(single bin)"]
-        Enrich["GeoJsonHistogramEnricher\n(per-feature histogram enrichment)"]
+        Factory["HistogramSchemaFactory
+    (creates HistogramSchema)"]
+        Schema["HistogramSchema
+    (shared bin definitions)"]
+        Bin["HistogramBin
+    (single bin)"]
+        Enrich["GeoJsonHistogramEnricher
+    (per-feature histogram enrichment)"]
     end
 
     GDal -->|"uses codes from"| Epsg
