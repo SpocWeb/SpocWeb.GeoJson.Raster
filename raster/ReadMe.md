@@ -2,28 +2,28 @@
 digest:
   local-classes:
     Epsg:
-      mtime: "2026-06-14T23:47:30Z"
+      mtime: "2026-07-07T06:35:55Z"
       digest: "f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239"
     GDalContext:
-      mtime: "2026-06-14T23:47:30Z"
+      mtime: "2026-07-07T06:35:55Z"
       digest: "b148f6976d8f56fe47232dc6cb3bba8c17bc765f7de78ceabb70fe784d1b51af"
     GeoJsonAddElevation:
       mtime: "2026-06-14T23:46:48Z"
       digest: "4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558"
     GeoJsonHistogramEnricher:
-      mtime: "2026-06-14T23:46:25Z"
+      mtime: "2026-07-07T06:35:55Z"
       digest: "4ca284e0bb778ec17b33ab031b3d877c911a0ced1f6674ebda2f1ce23649c803"
     GeometryZ:
       mtime: "2026-06-09T16:04:44Z"
       digest: "614d471a784aba104c9923263832b3f0d34646572a31bf8e501e2fbf68cbb08d"
     HistogramBin:
-      mtime: "2026-06-14T23:46:25Z"
+      mtime: "2026-07-07T06:35:55Z"
       digest: "9bbda65e43164d84c53064634085f069774ae6079d0a0eec2db7b8eaab158e2a"
     HistogramSchema:
-      mtime: "2026-06-14T23:46:25Z"
+      mtime: "2026-07-07T06:35:55Z"
       digest: "edc3fe8bcc6412f74cb7d711b7b1783b23d2473a53fd1fe83684244f22b2d023"
     HistogramSchemaFactory:
-      mtime: "2026-06-14T23:46:25Z"
+      mtime: "2026-07-07T06:35:55Z"
       digest: "bfe761ccdca398e6e43f2ecbdab9e10dd8f42136b479b23a086aaf33adcacfc7"
     StreamingGeoJsonProcessor:
       mtime: "2026-06-09T16:04:44Z"
@@ -89,7 +89,7 @@ flowchart TD
 | [GeometryZ](GeometryZ.cs) | Adds z-Component to a Geometry |
 | [HistogramBin](HistogramSchema.cs) | (shared) histogram bin definition. |
 | [HistogramSchema](HistogramSchema.cs) | shared histogram schema used by all features. |
-| [HistogramSchemaFactory](HistogramSchema.cs) |  |
+| [HistogramSchemaFactory](HistogramSchema.cs) | Creates HistogramSchema definitions from an explicit bucket width or value range. |
 | [GeoJsonHistogramEnricher](HistogramSchema.cs) | Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory. |
 | [StreamingGeoJsonProcessor](StreamingGeoJsonProcessor.cs) | Low-memory streaming processor that adds elevation Z coordinates to GeoJSON FeatureCollections  by reading and writing the JSON token-by-token without loading the entire document into memory. |
 
