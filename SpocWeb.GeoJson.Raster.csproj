@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-	  <DefaultItemExcludes>$(DefaultItemExcludes);**\*.vrn;**\*.vrn.zip</DefaultItemExcludes>
+	  
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B394D133-6546-4F6A-ACE4-A74E0D4D501E}</ProjectGuid>
