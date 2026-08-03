@@ -42,7 +42,7 @@
     <None Remove="_Src\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Files.System\Directories.cs" Link="_Links\Directories.cs" />
+    <Compile Include="..\SpocWeb.Files.System\Directories.cs" Link="_Links\Directories.cs" />
     <Compile Include="..\..\GlobalUsings.cs" Link="Properties\GlobalUsings.cs" />
     <Compile Include="..\SpocWeb.Basics\Extensions\text\XString.cs" Link="_Links\XString.cs" />
     <Compile Include="..\SpocWeb.Minimal\files\XMdString.cs" Link="_Links\XMdString.cs" />
