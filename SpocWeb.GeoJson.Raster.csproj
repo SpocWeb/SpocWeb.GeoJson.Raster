@@ -57,6 +57,9 @@
 	  <PackageReference Include="MaxRev.Gdal.WindowsRuntime.Minimal" Version="3.12.3.499" />
     <PackageReference Include="NetTopologySuite" Version="2.5.0" />
     <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
     <PackageReference Include="System.Text.Json" Version="10.0.5" />
   </ItemGroup>
