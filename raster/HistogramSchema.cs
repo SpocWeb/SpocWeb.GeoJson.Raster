@@ -64,7 +64,7 @@ public sealed class HistogramBin {
 /// <code language="yaml">
 /// pass: 2
 /// mtime: 2026-06-03T19:25:08Z
-/// digest: edc3fe8bcc6412f74cb7d711b7b1783b23d2473a53fd1fe83684244f22b2d023
+/// digest: b6829b271168e12fd0d71b100c611f873457f3bfa05b179b170d282a06153f1c
 /// </code>
 /// </example>
 public sealed class HistogramSchema {
