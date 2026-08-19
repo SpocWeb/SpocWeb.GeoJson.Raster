@@ -2,7 +2,7 @@
 digest:
   local-classes:
     Program:
-      mtime: "2026-06-09T16:04:44Z"
+      mtime: "2026-08-03T19:24:45Z"
       digest: "e1623107bf1d964a526b588adc259035fbc65d746201544be5e5926fddd0dbb9"
   folders: {}
 ---
@@ -60,7 +60,7 @@ flowchart TD
 
 | Class | Responsibility |
 |---|---|
-| [Program](Program.cs) | Entry point placeholder for the SpocWeb. |
+| [Program](Program.cs) | Entry point placeholder for the SpocWeb.GeoJson.Raster test project. |
 
 ## Relationships
 

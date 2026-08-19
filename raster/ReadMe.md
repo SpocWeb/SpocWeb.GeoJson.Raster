@@ -2,31 +2,31 @@
 digest:
   local-classes:
     Epsg:
-      mtime: "2026-07-07T06:35:55Z"
+      mtime: "2026-08-03T19:24:45Z"
       digest: "f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239"
     GDalContext:
-      mtime: "2026-07-07T06:35:55Z"
+      mtime: "2026-08-03T19:24:45Z"
       digest: "b148f6976d8f56fe47232dc6cb3bba8c17bc765f7de78ceabb70fe784d1b51af"
     GeoJsonAddElevation:
-      mtime: "2026-06-14T23:46:48Z"
+      mtime: "2026-08-03T19:24:45Z"
       digest: "4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558"
     GeoJsonHistogramEnricher:
-      mtime: "2026-07-07T06:35:55Z"
+      mtime: "2026-08-16T22:12:17Z"
       digest: "4ca284e0bb778ec17b33ab031b3d877c911a0ced1f6674ebda2f1ce23649c803"
     GeometryZ:
-      mtime: "2026-06-09T16:04:44Z"
+      mtime: "2026-08-03T19:24:45Z"
       digest: "614d471a784aba104c9923263832b3f0d34646572a31bf8e501e2fbf68cbb08d"
     HistogramBin:
-      mtime: "2026-07-07T06:35:55Z"
+      mtime: "2026-08-16T22:12:17Z"
       digest: "9bbda65e43164d84c53064634085f069774ae6079d0a0eec2db7b8eaab158e2a"
     HistogramSchema:
-      mtime: "2026-07-07T06:35:55Z"
-      digest: "edc3fe8bcc6412f74cb7d711b7b1783b23d2473a53fd1fe83684244f22b2d023"
+      mtime: "2026-08-16T22:12:17Z"
+      digest: "b6829b271168e12fd0d71b100c611f873457f3bfa05b179b170d282a06153f1c"
     HistogramSchemaFactory:
-      mtime: "2026-07-07T06:35:55Z"
+      mtime: "2026-08-16T22:12:17Z"
       digest: "bfe761ccdca398e6e43f2ecbdab9e10dd8f42136b479b23a086aaf33adcacfc7"
     StreamingGeoJsonProcessor:
-      mtime: "2026-06-09T16:04:44Z"
+      mtime: "2026-08-03T19:24:45Z"
       digest: "ec6b0e56b414e0d88def3631b0599d4b8e5926f7f43037b56bc47d561860ce7e"
   folders: {}
 ---
