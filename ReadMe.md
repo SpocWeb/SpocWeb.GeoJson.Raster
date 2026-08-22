@@ -1,4 +1,8 @@
 ---
+concepts: []
+facets: {}
+tags: []
+description: "Adds elevation information from Digital Elevation Models (DEM) to GeoJSON files, and computes per-feature elevation histograms using GDAL raster datasets such as the Copernicus DEM VRT."
 digest:
   local-classes:
     Program:

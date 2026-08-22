@@ -2,6 +2,8 @@ using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using OSGeo.GDAL;
 using OSGeo.OSR;
+using org.SpocWeb.root.Attributes;
+using System.ComponentModel;
 
 namespace org.SpocWeb.root.files.Tests.raster;
 
@@ -13,13 +15,8 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: dc2c111eaa794b356a1cad08948bb30fed2f2e2f0c90e9375caab34f268588a0
 /// updated: 2026-05-19
 /// </remarks>
-/// <example>
-/// <code language="yaml">
-/// pass: 2
-/// mtime: 2026-06-03T19:23:47Z
-/// digest: b148f6976d8f56fe47232dc6cb3bba8c17bc765f7de78ceabb70fe784d1b51af
-/// </code>
-/// </example>
+[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "b148f6976d8f56fe47232dc6cb3bba8c17bc765f7de78ceabb70fe784d1b51af", Stale = false, Path = "raster/GDalContext.cs", Since = "2026-08-22")]
+[System.ComponentModel.Description("Holds one worker-local GDAL and coordinate-transformation context for safe parallel processing.")]
 public sealed class GDalContext : IDisposable {
 
 	/// <summary>common EPSG coordinate reference system codes used by the application.<br/>
@@ -31,13 +28,8 @@ public sealed class GDalContext : IDisposable {
 	/// digest: dc2c111eaa794b356a1cad08948bb30fed2f2e2f0c90e9375caab34f268588a0
 	/// updated: 2026-05-19
 	/// </remarks>
-	/// <example>
-	/// <code language="yaml">
-	/// pass: 2
-	/// mtime: 2026-06-03T19:23:47Z
-	/// digest: f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239
-	/// </code>
-	/// </example>
+	[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239", Stale = false, Path = "raster/GDalContext.cs", Since = "2026-08-22")]
+	[System.ComponentModel.Description("common EPSG coordinate reference system codes used by the application.")]
 	public enum Epsg {
 		/// <summary>Represents wgs84.</summary>
 		Wgs84 = 4326,
@@ -123,6 +115,7 @@ public sealed class GDalContext : IDisposable {
 	public static readonly object GdalLock = new object();
 
 	/// <summary> Registers all GDAL drivers and sets the GDAL_DATA and PROJ_LIB configuration paths. </summary>
+	[System.ComponentModel.Description("Registers all GDAL drivers and sets the GDAL_DATA and PROJ_LIB configuration paths.")]
 	public static void InitGdal() {
 		Gdal.SetConfigOption("GDAL_DATA", @"C:\OSGeo4W\share\gdal");
 		Gdal.SetConfigOption("PROJ_LIB", @"C:\OSGeo4W\share\proj");
@@ -130,11 +123,13 @@ public sealed class GDalContext : IDisposable {
 	}
 
 	/// <summary>Initializes a new instance of <see cref="GDalContext"/>.</summary>
+	[System.ComponentModel.Description("Initializes a new instance of GDalContext.")]
 	static GDalContext() {
 		InitGdal();
 	}
 
 	/// <summary> Creates one worker-local processing context. </summary>  
+	[System.ComponentModel.Description("Creates one worker-local processing context.")]
 	public GDalContext(string vrtPath, HistogramSchema histogram, Epsg geoJsonEpsg = Epsg.Wgs84, Access access = Access.GA_ReadOnly) {
 		lock (GdalLock) {
 			Dataset = Gdal.Open(vrtPath, access);
@@ -183,14 +178,17 @@ public sealed class GDalContext : IDisposable {
 	}
 
 	/// <summary>Creates an empty histogram-count array for one feature.</summary>
+	[System.ComponentModel.Description("Creates an empty histogram-count array for one feature.")]
 	private static long[] CreateEmptyCounts(int bucketCount) => new long[bucketCount];
 	/// <summary>Creates an empty area-sum array sized to <paramref name="bucketCount"/> bins for one feature.</summary>
+	[System.ComponentModel.Description("Creates an empty area-sum array sized to bucketCount bins for one feature.")]
 	private static double[] CreateEmptyAreas(int bucketCount) => new double[bucketCount];
 
 	[ThreadStatic]
 	static double[] buffer;
 
 	/// <summary> Reads the raster value at the given geographic <paramref name="lon"/>/<paramref name="lat"/> coordinates. </summary>
+	[System.ComponentModel.Description("Reads the raster value at the given geographic lon/lat coordinates.")]
 	public double Sample(double lon, double lat) {
 		double px = (lon - _GeoTransformMatrix[0]) / _GeoTransformMatrix[1]; //assumes no Rotation
 		double py = (lat - _GeoTransformMatrix[3]) / _GeoTransformMatrix[5];
@@ -210,6 +208,7 @@ public sealed class GDalContext : IDisposable {
 	}
 
 	/// <summary> Calculates the histogram counts. </summary>
+	[System.ComponentModel.Description("Calculates the histogram counts.")]
 	public long[] GetHistogramCounts(IFeature feature) {
 		if (feature == null || feature.Geometry == null) {
 			return CreateEmptyCounts(_histogram.BucketCount);
@@ -238,6 +237,7 @@ public sealed class GDalContext : IDisposable {
 	}
 
 	/// <summary> Calculates the histogram Areas. </summary>
+	[System.ComponentModel.Description("Calculates the histogram Areas.")]
 	public double[] GetHistogramAreas(IFeature feature, string context) {
 		if (feature == null || feature.Geometry == null) {
 			return CreateEmptyAreas(_histogram.BucketCount);
@@ -266,6 +266,7 @@ public sealed class GDalContext : IDisposable {
 	}
 
 	/// <summary> Disposes all worker-local GDAL and spatial-reference resources. </summary>  
+	[System.ComponentModel.Description("Disposes all worker-local GDAL and spatial-reference resources.")]
 	public void Dispose() {
 		if (_transformToRaster != null) {
 			_transformToRaster.Dispose();

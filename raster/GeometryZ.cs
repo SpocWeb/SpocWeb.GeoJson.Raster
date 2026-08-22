@@ -1,4 +1,6 @@
 using NetTopologySuite.Geometries;
+using org.SpocWeb.root.Attributes;
+using System.ComponentModel;
 
 namespace org.SpocWeb.root.files.Tests.raster;
 
@@ -10,18 +12,14 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: 748286817e01994ab7231a86addf5d776442f03c95ca4f8ec034cacb079f929d
 /// updated: 2026-05-19
 /// </remarks>
-/// <example>
-/// <code language="yaml">
-/// pass: 2
-/// mtime: 2026-05-19T14:23:36Z
-/// digest: 614d471a784aba104c9923263832b3f0d34646572a31bf8e501e2fbf68cbb08d
-/// </code>
-/// </example>
+[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "614d471a784aba104c9923263832b3f0d34646572a31bf8e501e2fbf68cbb08d", Stale = false, Path = "raster/GeometryZ.cs", Since = "2026-08-22")]
+[System.ComponentModel.Description("Adds z-Component to a Geometry")]
 public static class GeometryZ {
 
 	public static GeometryFactory GeometryFactory = new();
 
 	/// <summary> Adds the Z Dimension from the <paramref name="elevationModel"/> to the <paramref name="geometry"/> </summary>
+	[System.ComponentModel.Description("Adds the Z Dimension from the elevationModel to the geometry")]
 	public static Geometry AddElevationAsZ(this GDalContext elevationModel, Geometry geometry)
 		=> geometry switch {
 		Point p => GeometryFactory.CreatePoint(elevationModel.AddElevationAsZ(p.Coordinate)),
@@ -40,6 +38,7 @@ public static class GeometryZ {
 	};
 
 	/// <summary> Adds the Z Dimension from the <paramref name="elevationModel"/> to the <paramref name="polygon"/> </summary>
+	[System.ComponentModel.Description("Adds the Z Dimension from the elevationModel to the polygon")]
 	public static Polygon AddElevationAsZ(this GDalContext elevationModel, Polygon polygon) {
 		var shell = GeometryFactory.CreateLinearRing(elevationModel.AddElevationAsZ(polygon.Shell.Coordinates));
 		var holes = polygon.Holes
@@ -49,12 +48,14 @@ public static class GeometryZ {
 	}
 
 	/// <summary> Adds the Z Dimension from the <paramref name="elevationModel"/> to the <paramref name="coordinates"/> </summary>
+	[System.ComponentModel.Description("Adds the Z Dimension from the elevationModel to the coordinates")]
 	public static Coordinate[] AddElevationAsZ(this GDalContext elevationModel, Coordinate[] coordinates)
 		=> double.IsNaN(coordinates[0].Z)
 			? coordinates.Select(elevationModel.AddElevationAsZ).ToArray()
 			: coordinates;
 
 	/// <summary> Adds the Z Dimension from the <paramref name="elevationModel"/> to the <paramref name="coordinates"/> </summary>
+	[System.ComponentModel.Description("Adds the Z Dimension from the elevationModel to the coordinates")]
 	public static Coordinate AddElevationAsZ(this GDalContext elevationModel, Coordinate coordinates)
 		=> double.IsNaN(coordinates.Z)
 		? new CoordinateZ(coordinates.X, coordinates.Y, Math.Round(elevationModel.Sample(coordinates.X, coordinates.Y), 4))

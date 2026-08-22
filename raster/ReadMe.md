@@ -1,4 +1,8 @@
 ---
+concepts: []
+facets: {}
+tags: []
+description: "GDAL-backed raster processing classes for elevation enrichment and histogram computation."
 digest:
   local-classes:
     Epsg:

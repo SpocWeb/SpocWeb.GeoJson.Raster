@@ -3,6 +3,8 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using org.SpocWeb.root.Attributes;
+using System.ComponentModel;
 
 namespace org.SpocWeb.root.files.Tests.raster;
 
@@ -18,13 +20,8 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: 0f6a243ef484d835e4f85a9818515c4f8d14061e91e82aff94546b2b55fa4684
 /// updated: 2026-05-19
 /// </remarks>
-/// <example>
-/// <code language="yaml">
-/// pass: 2
-/// mtime: 2026-06-03T19:24:10Z
-/// digest: 4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558
-/// </code>
-/// </example>
+[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558", Stale = false, Path = "raster/GeoJsonAddElevation.cs", Since = "2026-08-22")]
+[System.ComponentModel.Description("Adds elevation (Z) coordinates to every geometry in a GeoJSON file,  reading height values from a GDAL raster model such as a Copernicus DEM VRT.")]
 public static class GeoJsonAddElevation {
 	/// <summary>Specifies the constant geo Json Extension.</summary>
 	public const string GeoJsonExtension = ".geoJson";
@@ -41,6 +38,7 @@ public static class GeoJsonAddElevation {
 	/// <remarks>Each GeoJSON file is updated in place by adding elevation values as Z coordinates,
 	/// replacing the original file.
 	/// </remarks>
+	[System.ComponentModel.Description("Adds elevation data as Z coordinates to all GeoJSON files in the geoJsonDirectory and its subdirectories, using the vrtElevationFile model.")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\SpocWeb\_Standards\Earth\Continent\")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
@@ -109,6 +107,7 @@ public static class GeoJsonAddElevation {
 	}
 
 	/// <summary> Adds elevation Z to the geometry of <paramref name="feature"/> and returns the serialized GeoJSON Feature string. </summary>
+	[System.ComponentModel.Description("Adds elevation Z to the geometry of feature and returns the serialized GeoJSON Feature string.")]
 	static string SerializeElevatedFeature(GDalContext elevationModel, JToken feature) {
 		var geometryElement = feature["geometry"];
 		var geomZ = geometryElement == null || geometryElement.Type == JTokenType.Null
@@ -125,6 +124,7 @@ public static class GeoJsonAddElevation {
 		= GeoJsonSerializer.Create(SerializerSettings, GeometryZ.GeometryFactory, 3);
 
 	/// <summary> Deserializes a GeoJSON string into a <typeparamref name="T"/> instance using <see cref="GeoJsonSerializer3D"/>. </summary>
+	[System.ComponentModel.Description("Deserializes a GeoJSON string into a   instance using GeoJsonSerializer3D.")]
 	public static T GeoJsonDeserialize<T>(string json) {
 		using TextReader sr = new StringReader(json);
 		return GeoJsonDeserialize<T>(sr);
@@ -146,6 +146,7 @@ public static class GeoJsonAddElevation {
 	public static T GeoJsonDeserialize<T>(this JsonTextReader jr) => GeoJsonSerializer3D.Deserialize<T>(jr)!;
 
 	/// <summary> Serializes <paramref name="geoJson"/> to an indented GeoJSON string using <see cref="GeoJsonSerializer3D"/>. </summary>
+	[System.ComponentModel.Description("Serializes geoJson to an indented GeoJSON string using GeoJsonSerializer3D.")]
 	public static string GeoJsonSerialize(this Geometry geoJson, int indentation = 2, string newLine = "\n")
 		=> new StringBuilder().GeoJsonSerialize(geoJson, indentation, newLine).ToString();
 
@@ -174,6 +175,7 @@ public static class GeoJsonAddElevation {
 
 
 	/// <summary> Creates an indented <see cref="JsonTextWriter"/> wrapping <paramref name="sb"/>. </summary>
+	[System.ComponentModel.Description("Creates an indented JsonTextWriter wrapping sb.")]
 	public static JsonTextWriter CreateJsonWriter(this TextWriter sb, int indentation = 2)
 		=> new JsonTextWriter(sb) {
 			Formatting = Formatting.Indented,
