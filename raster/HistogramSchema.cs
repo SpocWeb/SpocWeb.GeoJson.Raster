@@ -217,7 +217,7 @@ public static class HistogramSchemaFactory {
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "4ca284e0bb778ec17b33ab031b3d877c911a0ced1f6674ebda2f1ce23649c803", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-08-23T11:29:30Z", Digest = "51a8275f98d70ec24d072e4b6282e71216d72c2786f95a27e1a89b37994d6b48", Stale = true, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory.")]
 public static class GeoJsonHistogramEnricher {
 
