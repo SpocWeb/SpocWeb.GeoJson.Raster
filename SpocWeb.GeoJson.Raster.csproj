@@ -3,10 +3,10 @@
 	  
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B394D133-6546-4F6A-ACE4-A74E0D4D501E}</ProjectGuid>
+    <ProjectGuid>{A1F2C7E4-9D3B-4A6E-8C1F-3E7B5D2A9F60}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>org.SpocWeb.root.files.Tests</RootNamespace>
-    <AssemblyName>SpocWeb.Files.Tests</AssemblyName>
+    <AssemblyName>SpocWeb.GeoJson.Raster</AssemblyName>
     <TargetFrameworks>net48;net10.0</TargetFrameworks>
 	  <LangVersion>latest</LangVersion>
 	  <Nullable>enable</Nullable>
@@ -49,19 +49,19 @@
     <Compile Include="..\SpocWeb.Minimal\interfaces\maths\Statistics1D.cs" Link="_Links\Statistics1D.cs" />
   </ItemGroup>
   <ItemGroup>
-	  <PackageReference Include="coverlet.collector" Version="6.0.4">
+	  <PackageReference Include="coverlet.collector">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="GDAL" Version="3.12.1" />
-	  <PackageReference Include="MaxRev.Gdal.WindowsRuntime.Minimal" Version="3.12.3.499" />
-    <PackageReference Include="NetTopologySuite" Version="2.5.0" />
-    <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
+	  <PackageReference Include="GDAL" />
+	  <PackageReference Include="MaxRev.Gdal.WindowsRuntime.Minimal" />
+    <PackageReference Include="NetTopologySuite" />
+    <PackageReference Include="NetTopologySuite.IO.GeoJSON" />
     <PackageReference Include="Microsoft.NET.Test.Sdk">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
-    <PackageReference Include="System.Text.Json" Version="10.0.5" />
+    <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
