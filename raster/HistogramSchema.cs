@@ -20,7 +20,7 @@ using System.ComponentModel;
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "9bbda65e43164d84c53064634085f069774ae6079d0a0eec2db7b8eaab158e2a", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "9bbda65e43164d84c53064634085f069774ae6079d0a0eec2db7b8eaab158e2a", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("(shared) histogram bin definition.")]
 public sealed class HistogramBin {
 
@@ -64,7 +64,7 @@ public sealed class HistogramBin {
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "b6829b271168e12fd0d71b100c611f873457f3bfa05b179b170d282a06153f1c", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "b6829b271168e12fd0d71b100c611f873457f3bfa05b179b170d282a06153f1c", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("shared histogram schema used by all features.")]
 public sealed class HistogramSchema {
 
@@ -117,7 +117,7 @@ public sealed class HistogramSchema {
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "bfe761ccdca398e6e43f2ecbdab9e10dd8f42136b479b23a086aaf33adcacfc7", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "bfe761ccdca398e6e43f2ecbdab9e10dd8f42136b479b23a086aaf33adcacfc7", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Creates HistogramSchema definitions from an explicit bucket width or value range.")]
 public static class HistogramSchemaFactory {
 
@@ -217,7 +217,7 @@ public static class HistogramSchemaFactory {
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "4ca284e0bb778ec17b33ab031b3d877c911a0ced1f6674ebda2f1ce23649c803", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "4ca284e0bb778ec17b33ab031b3d877c911a0ced1f6674ebda2f1ce23649c803", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory.")]
 public static class GeoJsonHistogramEnricher {
 

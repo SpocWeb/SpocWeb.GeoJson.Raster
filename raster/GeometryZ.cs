@@ -12,7 +12,7 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: 748286817e01994ab7231a86addf5d776442f03c95ca4f8ec034cacb079f929d
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "614d471a784aba104c9923263832b3f0d34646572a31bf8e501e2fbf68cbb08d", Stale = false, Path = "raster/GeometryZ.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "614d471a784aba104c9923263832b3f0d34646572a31bf8e501e2fbf68cbb08d", Stale = false, Path = "raster/GeometryZ.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Adds z-Component to a Geometry")]
 public static class GeometryZ {
 

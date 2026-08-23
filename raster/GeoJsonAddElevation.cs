@@ -20,7 +20,7 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: 0f6a243ef484d835e4f85a9818515c4f8d14061e91e82aff94546b2b55fa4684
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558", Stale = false, Path = "raster/GeoJsonAddElevation.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558", Stale = false, Path = "raster/GeoJsonAddElevation.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Adds elevation (Z) coordinates to every geometry in a GeoJSON file,  reading height values from a GDAL raster model such as a Copernicus DEM VRT.")]
 public static class GeoJsonAddElevation {
 	/// <summary>Specifies the constant geo Json Extension.</summary>

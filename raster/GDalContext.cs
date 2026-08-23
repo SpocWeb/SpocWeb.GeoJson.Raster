@@ -15,7 +15,7 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: dc2c111eaa794b356a1cad08948bb30fed2f2e2f0c90e9375caab34f268588a0
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "b148f6976d8f56fe47232dc6cb3bba8c17bc765f7de78ceabb70fe784d1b51af", Stale = false, Path = "raster/GDalContext.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "b148f6976d8f56fe47232dc6cb3bba8c17bc765f7de78ceabb70fe784d1b51af", Stale = false, Path = "raster/GDalContext.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Holds one worker-local GDAL and coordinate-transformation context for safe parallel processing.")]
 public sealed class GDalContext : IDisposable {
 
@@ -28,7 +28,7 @@ public sealed class GDalContext : IDisposable {
 	/// digest: dc2c111eaa794b356a1cad08948bb30fed2f2e2f0c90e9375caab34f268588a0
 	/// updated: 2026-05-19
 	/// </remarks>
-	[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239", Stale = false, Path = "raster/GDalContext.cs", Since = "2026-08-22")]
+	[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239", Stale = false, Path = "raster/GDalContext.cs", Since = "2026-08-22")]
 	[System.ComponentModel.Description("common EPSG coordinate reference system codes used by the application.")]
 	public enum Epsg {
 		/// <summary>Represents wgs84.</summary>

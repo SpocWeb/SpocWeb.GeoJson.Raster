@@ -15,7 +15,7 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: 5e2569cea31bf06736224b64215e0f8bf743332cf15f2b3f10d73b9b212de291
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T17:32:50Z", Digest = "ec6b0e56b414e0d88def3631b0599d4b8e5926f7f43037b56bc47d561860ce7e", Stale = false, Path = "raster/StreamingGeoJsonProcessor.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "ec6b0e56b414e0d88def3631b0599d4b8e5926f7f43037b56bc47d561860ce7e", Stale = false, Path = "raster/StreamingGeoJsonProcessor.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Low-memory streaming processor that adds elevation Z coordinates to GeoJSON FeatureCollections  by reading and writing the JSON token-by-token without loading the entire document into memory.")]
 public static class StreamingGeoJsonProcessor {
 
