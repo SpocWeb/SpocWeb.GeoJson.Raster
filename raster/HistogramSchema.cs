@@ -221,8 +221,7 @@ public static class HistogramSchemaFactory {
 [System.ComponentModel.Description("Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory.")]
 public static class GeoJsonHistogramEnricher {
 
-	/// <summary>Specifies the constant geo Json Pattern.<br/>
-	/// Specifies the constant geo Json Pattern.</summary>
+	/// <summary>Specifies the constant geo Json Pattern.</summary>
 	public const string GeoJsonExtension = ".geoJson";
 	/// <summary>Specifies the constant geo Json Pattern.</summary>
 	public const string GeoJsonPattern = "*" + GeoJsonExtension;
