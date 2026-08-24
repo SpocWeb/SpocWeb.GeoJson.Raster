@@ -1,4 +1,4 @@
-using NetTopologySuite.Features;
+﻿using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using OSGeo.GDAL;
 using OSGeo.OSR;
