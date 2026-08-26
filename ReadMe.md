@@ -1,7 +1,15 @@
 ---
-concepts: []
-facets: {}
-tags: []
+concepts:
+  - digital_elevation_model
+  - gdal_raster_processing
+  - geojson_elevation_enrichment
+facets:
+  layer: domain
+  status: active
+  complexity: 3
+tags:
+  - code/elevation_enrichment
+  - code/raster_processing
 description: "Adds elevation information from Digital Elevation Models (DEM) to GeoJSON files, and computes per-feature elevation histograms using GDAL raster datasets such as the Copernicus DEM VRT."
 digest:
   local-classes:

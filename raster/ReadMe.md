@@ -1,7 +1,16 @@
 ---
-concepts: []
-facets: {}
-tags: []
+concepts:
+  - digital_elevation_model
+  - gdal_raster_processing
+  - histogram_computation
+facets:
+  layer: domain
+  status: active
+  complexity: 3
+tags:
+  - code/elevation_enrichment
+  - code/histogram_computation
+  - code/raster_processing
 description: "GDAL-backed raster processing classes for elevation enrichment and histogram computation."
 digest:
   local-classes:

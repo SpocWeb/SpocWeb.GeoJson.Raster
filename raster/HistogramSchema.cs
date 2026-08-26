@@ -20,36 +20,60 @@ using System.ComponentModel;
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "9bbda65e43164d84c53064634085f069774ae6079d0a0eec2db7b8eaab158e2a", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+[Tags("code/data_model")]
+[DocState(Pass = 2, MTime = "2026-08-26T09:15:50Z", Digest = "9bbda65e43164d84c53064634085f069774ae6079d0a0eec2db7b8eaab158e2a", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("(shared) histogram bin definition.")]
+[Concept("histogram_computation")]
 public sealed class HistogramBin {
 
 	/// <summary> zero-based index of this bin. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("zero-based index of this bin.")]
+	[Concept("histogram_computation")]
 	public int BinIndex { get; set; }
 
 	/// <summary> inclusive lower bound of this bin </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("inclusive lower bound of this bin")]
+	[Concept("histogram_computation")]
 	public double MinimumValue { get; set; }
 
 	/// <summary> upper bound of this bin </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("upper bound of this bin")]
+	[Concept("histogram_computation")]
 	public double MaximumValue { get; set; }
 
 	/// <summary> Mid Value of this bin </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("Mid Value of this bin")]
+	[Concept("histogram_computation")]
 	public double MidValue => (MaximumValue + MinimumValue) * 0.5;
 
 	/// <summary> Width of this bin </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("Width of this bin")]
+	[Concept("histogram_computation")]
 	public double Width => (MaximumValue - MinimumValue) * 0.5;
 
 	/// <summary> exact interval notation for this bin. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("exact interval notation for this bin.")]
+	[Concept("histogram_computation")]
 	public string IntervalNotation { get; set; }
 
 	/// <summary> human-readable label for this bin. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("human-readable label for this bin.")]
+	[Concept("histogram_computation")]
 	public string Label { get; set; }
 
 	/// <inheritdoc />
@@ -64,48 +88,81 @@ public sealed class HistogramBin {
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "b6829b271168e12fd0d71b100c611f873457f3bfa05b179b170d282a06153f1c", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+[Tags("code/data_model")]
+[DocState(Pass = 2, MTime = "2026-08-26T09:15:50Z", Digest = "b6829b271168e12fd0d71b100c611f873457f3bfa05b179b170d282a06153f1c", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("shared histogram schema used by all features.")]
+[Concept("histogram_computation")]
 public sealed class HistogramSchema {
 
 	/// <summary> identifier that links features to this schema. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("identifier that links features to this schema.")]
+	[Concept("histogram_computation")]
 	public string HistogramSchemaId { get; set; }
 
 	/// <summary> measurement unit for bin values, e.g. meters. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("measurement unit for bin values, e.g.")]
+	[Concept("histogram_computation")]
 	public string Unit { get; set; }
 
 	/// <summary> textual description of the interval boundary convention. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("textual description of the interval boundary convention.")]
+	[Concept("histogram_computation")]
 	public string IntervalConvention { get; set; }
 
 	/// <summary> textual description of the out-of-range handling policy. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("textual description of the out-of-range handling policy.")]
+	[Concept("histogram_computation")]
 	public string OutOfRangePolicy { get; set; }
 
 	/// <summary> textual description of the cell inclusion rule. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("textual description of the cell inclusion rule.")]
+	[Concept("histogram_computation")]
 	public string CellInclusionRule { get; set; }
 
 	/// <summary> global histogram minimum </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("global histogram minimum")]
+	[Concept("histogram_computation")]
 	public double MinimumValue { get; set; }
 
 	/// <summary> global histogram maximum </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("global histogram maximum")]
+	[Concept("histogram_computation")]
 	public double MaximumValue { get; set; }
 
 	/// <summary> total number of bins in the histogram. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("total number of bins in the histogram.")]
+	[Concept("histogram_computation")]
 	public int BucketCount { get; set; }
 
 	/// <summary> width of each histogram bin </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("width of each histogram bin")]
+	[Concept("histogram_computation")]
 	public double BucketWidth { get; set; }
 
 	/// <summary> ordered collection of <see cref="HistogramBin"/>. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_model")]
 	[System.ComponentModel.Description("ordered collection of HistogramBin.")]
+	[Concept("histogram_computation")]
 	public List<HistogramBin> Bins { get; set; }
 }
 
@@ -117,12 +174,18 @@ public sealed class HistogramSchema {
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "bfe761ccdca398e6e43f2ecbdab9e10dd8f42136b479b23a086aaf33adcacfc7", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[Facets(Layer = "domain", Status = "active", Complexity = 2)]
+[Tags("code/factory_method", "code/histogram_computation")]
+[DocState(Pass = 2, MTime = "2026-08-26T09:15:50Z", Digest = "bfe761ccdca398e6e43f2ecbdab9e10dd8f42136b479b23a086aaf33adcacfc7", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Creates HistogramSchema definitions from an explicit bucket width or value range.")]
+[Concept("histogram_computation")]
 public static class HistogramSchemaFactory {
 
 	/// <summary>  Creates shared histogram schema definitions. </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/factory_method")]
 	[System.ComponentModel.Description("Creates shared histogram schema definitions.")]
+	[Concept("histogram_computation")]
 	public static HistogramSchema CreateFromWidth(
 		string histogramSchemaId,
 		double histogramMin,
@@ -135,7 +198,10 @@ public static class HistogramSchemaFactory {
 		labelDecimalPlaces = 2);
 
 	/// <summary>  Creates shared histogram schema definitions. </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/factory_method")]
 	[System.ComponentModel.Description("Creates shared histogram schema definitions.")]
+	[Concept("histogram_computation")]
 	public static HistogramSchema CreateFromRange(
 		string histogramSchemaId,
 		double histogramMin,
@@ -217,8 +283,13 @@ public static class HistogramSchemaFactory {
 /// digest: ad370b8549690c526772074b2919bc6c31c75b6aff07686962a6f911cb882fc1
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-25T02:32:00Z", Digest = "4ca284e0bb778ec17b33ab031b3d877c911a0ced1f6674ebda2f1ce23649c803", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[Facets(Layer = "domain", Status = "active", Complexity = 4)]
+[Tags("code/histogram_computation", "code/raster_processing", "code/parallel_processing")]
+[DocState(Pass = 2, MTime = "2026-08-26T09:15:50Z", Digest = "4ca284e0bb778ec17b33ab031b3d877c911a0ced1f6674ebda2f1ce23649c803", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory.")]
+[Concept("histogram_computation")]
+[Concept("gdal_raster_processing")]
+[Concept("geojson_elevation_enrichment")]
 public static class GeoJsonHistogramEnricher {
 
 	/// <summary>Specifies the constant geo Json Pattern.</summary>
@@ -230,12 +301,15 @@ public static class GeoJsonHistogramEnricher {
 	public const double EarthRadiusKM = 6_371.008_8;
 
 	/// <summary> Uses an existing VRT and writes compact histograms into the output GeoJSON </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 3)]
+	[Tags("code/histogram_computation")]
 	[System.ComponentModel.Description("Uses an existing VRT and writes compact histograms into the output GeoJSON")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\Obsidian.SpocWeb\_Standards\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\SpocWeb\_Standards\Earth\Continent\")]
+	[Concept("histogram_computation")]
 	public static void AddHistogram(string vrtElevationFile, string geoJsonDirectory
 		, Epsg geoJsonEpsg = Epsg.Wgs84, int parallelism = 0) {
 		var halfWidth = 25;
@@ -274,7 +348,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Creates the raster extent envelope from the dataset dimensions and geoTransform. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 2)]
+	[Tags("code/raster_processing")]
 	[System.ComponentModel.Description("Creates the raster extent envelope from the dataset dimensions and geoTransform.")]
+	[Concept("gdal_raster_processing")]
 	public static Envelope CreateRasterExtentEnvelope(this Dataset dataset, double[]? geoTransform = null) {
 		geoTransform ??= new double[6];
 		dataset.GetGeoTransform(geoTransform);
@@ -286,7 +363,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Loads the GeoJSON, computes histogram Areas, and writes the output file. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 3)]
+	[Tags("code/histogram_computation", "code/file_io")]
 	[System.ComponentModel.Description("Loads the GeoJSON, computes histogram Areas, and writes the output file.")]
+	[Concept("histogram_computation")]
 	public static bool AddHistogramAreas(this GDalContext gDal
 		, HistogramSchema histogram, FileInfo inputGeoJsonPath, FileInfo outputGeoJsonPath, double scale, string label) {
 		var feature = inputGeoJsonPath.GeoJsonDeserialize<Feature>();
@@ -332,7 +412,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Rounds <paramref name="value"/> to the given number of decimal <paramref name="digits"/> using away-from-zero midpoint rounding, returned as <see cref="decimal"/>. </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/numeric_rounding")]
 	[System.ComponentModel.Description("Rounds value to the given number of decimal digits using away-from-zero midpoint rounding, returned as decimal.")]
+	[Concept("histogram_computation")]
 	public static decimal Round(this double value, int digits) {
 		var pow10 = Math.Pow(10, -digits);
 		var result = Math.Round(value / pow10, 0, MidpointRounding.AwayFromZero) * pow10;
@@ -340,7 +423,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Loads the GeoJSON, computes histogram counts in parallel, and writes the compact output file. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 3)]
+	[Tags("code/histogram_computation", "code/parallel_processing")]
 	[System.ComponentModel.Description("Loads the GeoJSON, computes histogram counts in parallel, and writes the compact output file.")]
+	[Concept("histogram_computation")]
 	public static void AddHistogramCounts(this GDalContext gDal
 		, HistogramSchema schema,
 		string rasterPath,
@@ -388,7 +474,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Validates that the histogram schema is internally consistent. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/validation")]
 	[System.ComponentModel.Description("Validates that the histogram schema is internally consistent.")]
+	[Concept("histogram_computation")]
 	public static string Validate(HistogramSchema schema) {
 		if (schema == null) {
 			throw new ArgumentNullException(nameof(schema));
@@ -426,7 +515,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Resolves the effective degree of parallelism for the processing run. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/parallel_processing")]
 	[System.ComponentModel.Description("Resolves the effective degree of parallelism for the processing run.")]
+	[Concept("histogram_computation")]
 	private static int ResolveMaxDegreeOfParallelism(int maxDegreeOfParallelism) {
 		if (maxDegreeOfParallelism > 0) {
 			return maxDegreeOfParallelism;
@@ -437,7 +529,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Collects DEM tile paths from a directory. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/file_traversal")]
 	[System.ComponentModel.Description("Collects DEM tile paths from a directory.")]
+	[Concept("digital_elevation_model")]
 	private static string[] CollectDemTilePaths(string demDirectory, bool recursive) {
 		var searchOption = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 		var result = new List<string>();
@@ -448,7 +543,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Builds a temporary VRT using the gdalbuildvrt executable. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 3)]
+	[Tags("code/process_invocation", "code/raster_processing")]
 	[System.ComponentModel.Description("Builds a temporary VRT using the gdalbuildvrt executable.")]
+	[Concept("gdal_raster_processing")]
 	public static void BuildTemporaryVrtWithGdalBuildVrt(string vrtPath, string listPath, string gdalBuildVrtExePath
 		, params string[] tilePaths) {
 		File.WriteAllLines(listPath, tilePaths);
@@ -491,11 +589,17 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Quotes one command-line argument. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/string_formatting")]
 	[System.ComponentModel.Description("Quotes one command-line argument.")]
+	[Concept("command_line_argument_handling")]
 	private static string QuoteArgument(string value) => "\"" + value + "\"";
 
 	/// <summary> Attempts to delete a file and suppresses deletion errors. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/file_io", "code/error_handling")]
 	[System.ComponentModel.Description("Attempts to delete a file and suppresses deletion errors.")]
+	[Concept("file_cleanup")]
 	private static void TryDeleteFile(string path) {
 		try {
 			if (!string.IsNullOrWhiteSpace(path) && File.Exists(path)) {
@@ -507,7 +611,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Gets the feature attribute table or creates one if it does not exist. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_access")]
 	[System.ComponentModel.Description("Gets the feature attribute table or creates one if it does not exist.")]
+	[Concept("geojson_feature_attributes")]
 	private static IAttributesTable GetOrCreateAttributes(this IFeature feature) {
 		if (feature == null) {
 			throw new InvalidOperationException("Feature is null.");
@@ -519,7 +626,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Sets or adds one feature attribute value. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_access")]
 	[System.ComponentModel.Description("Sets or adds one feature attribute value.")]
+	[Concept("geojson_feature_attributes")]
 	public static void SetAttribute(this IAttributesTable attributes, string name, object value) {
 		if (attributes.Exists(name)) {
 			attributes[name] = value;
@@ -529,12 +639,18 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Sets or adds one feature attribute value. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/data_access")]
 	[System.ComponentModel.Description("Sets or adds one feature attribute value.")]
+	[Concept("geojson_feature_attributes")]
 	public static object? GetAttribute(this IAttributesTable attributes, string name, object? fallBack = null)
 		=> attributes.Exists(name) ? attributes[name] : fallBack;
 
 	/// <summary> Determines whether a raster value should be treated as NoData. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/validation")]
 	[System.ComponentModel.Description("Determines whether a raster value should be treated as NoData.")]
+	[Concept("raster_nodata_handling")]
 	private static bool IsNoData(double value, bool hasNoDataValue, double noDataValue) {
 		if (!hasNoDataValue) {
 			return false;
@@ -548,7 +664,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Transforms a polygonal geometry into the raster coordinate reference system. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 2)]
+	[Tags("code/coordinate_transformation", "code/geometry_transformation")]
 	[System.ComponentModel.Description("Transforms a polygonal geometry into the raster coordinate reference system.")]
+	[Concept("coordinate_reference_system")]
 	public static Geometry TransformPolygonalGeometry(this Geometry geometry, CoordinateTransformation transform) {
 		var geometryFactory = geometry.Factory;
 		if (geometry is Polygon polygon) {
@@ -565,7 +684,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Transforms one polygon into the raster coordinate reference system. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/coordinate_transformation")]
 	[System.ComponentModel.Description("Transforms one polygon into the raster coordinate reference system.")]
+	[Concept("coordinate_reference_system")]
 	public static Polygon TransformPolygon(this Polygon polygon, CoordinateTransformation transform, GeometryFactory geometryFactory) {
 		var shell = TransformLinearRing((LinearRing) polygon.ExteriorRing, transform, geometryFactory);
 		var holes = new LinearRing[polygon.NumInteriorRings];
@@ -579,7 +701,10 @@ public static class GeoJsonHistogramEnricher {
 	static double[]? _Point;
 
 	/// <summary> Transforms one linear ring into the raster coordinate reference system. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/coordinate_transformation")]
 	[System.ComponentModel.Description("Transforms one linear ring into the raster coordinate reference system.")]
+	[Concept("coordinate_reference_system")]
 	private static LinearRing TransformLinearRing(this LinearRing ring, CoordinateTransformation transform, GeometryFactory geometryFactory) {
 		Coordinate[] source = ring.Coordinates;
 		var target = new Coordinate[source.Length];
@@ -594,7 +719,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Copies the X, Y (and optionally Z) components of <paramref name="coordinate"/> into <paramref name="point"/>. </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/coordinate_transformation")]
 	[System.ComponentModel.Description("Copies the X, Y (and optionally Z) components of coordinate into point.")]
+	[Concept("coordinate_reference_system")]
 	public static void ToArray(this Coordinate coordinate, double[] point) {
 		if (point.Length > 2)
 			point[2] = coordinate.Z;
@@ -603,7 +731,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Attempts to force traditional GIS axis order on a spatial reference. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/coordinate_transformation")]
 	[System.ComponentModel.Description("Attempts to force traditional GIS axis order on a spatial reference.")]
+	[Concept("coordinate_reference_system")]
 	public static void TrySetTraditionalGisAxisOrder(this SpatialReference spatialReference) {
 		if (spatialReference == null) {
 			return;
@@ -626,7 +757,10 @@ public static class GeoJsonHistogramEnricher {
 	private const double RadPerDegree = Math.PI / 180.0;
 
 	/// <summary> geographic ground area of one raster cell row element in rad². </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 2)]
+	[Tags("code/geospatial_math")]
 	[System.ComponentModel.Description("geographic ground area of one raster cell row element in rad².")]
+	[Concept("geographic_area_computation")]
 	private static double ComputeGeographicPixelArea(
 		double pixelWidthDegrees,
 		double northEdgeLatitudeDegrees,
@@ -640,12 +774,18 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Clamps a latitude value into the valid geographic range. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/numeric_clamping")]
 	[System.ComponentModel.Description("Clamps a latitude value into the valid geographic range.")]
+	[Concept("geographic_area_computation")]
 	public static double ClampLatitudeDegrees(double latitudeDegrees) => latitudeDegrees > 90.0 ? 90.0 :
 		latitudeDegrees < -90.0 ? -90.0 : latitudeDegrees;
 
 	/// <summary> Computes the area-weighted histogram for a polygon in raster coordinates. </summary>  
+	[Facets(Layer = "domain", Status = "active", Complexity = 4)]
+	[Tags("code/histogram_computation", "code/raster_processing")]
 	[System.ComponentModel.Description("Computes the area-weighted histogram for a polygon in raster coordinates.")]
+	[Concept("histogram_computation")]
 	public static double[] PolygonHistogramByArea(this Dataset dem, Band band, Geometry polygonInRasterCrs
 		, double[] geoTransform, bool hasNoDataValue, double noDataValue, HistogramSchema schema, string context) {
 		var areas = new double[schema.BucketCount];
@@ -721,7 +861,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Computes one compact histogram-count array for a polygon in raster coordinates. </summary> 
+	[Facets(Layer = "domain", Status = "active", Complexity = 4)]
+	[Tags("code/histogram_computation", "code/raster_processing")]
 	[System.ComponentModel.Description("Computes one compact histogram-count array for a polygon in raster coordinates.")]
+	[Concept("histogram_computation")]
 	public static long[] PolygonHistogramByCounts(this Dataset dem, Band band, Geometry polygonInRasterCrs
 		, double[] geoTransform, bool hasNoDataValue, double noDataValue, HistogramSchema schema) {
 		var counts = new long[schema.BucketCount];
@@ -792,7 +935,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Writes the <paramref name="schema"/> to the <paramref name="csvPath"/> </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/file_io", "code/serialization")]
 	[System.ComponentModel.Description("Writes the schema to the csvPath")]
+	[Concept("histogram_computation")]
 	public static void WriteCsv(this HistogramSchema schema, string csvPath) {
 		if (schema == null) {
 			throw new ArgumentNullException(nameof(schema));
@@ -818,7 +964,10 @@ public static class GeoJsonHistogramEnricher {
 	}
 
 	/// <summary> Writes the <paramref name="schema"/> to the <paramref name="jsonPath"/> </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/file_io", "code/serialization")]
 	[System.ComponentModel.Description("Writes the schema to the jsonPath")]
+	[Concept("histogram_computation")]
 	public static void WriteJson(HistogramSchema schema, string jsonPath) {
 		if (schema == null) {
 			throw new ArgumentNullException(nameof(schema));

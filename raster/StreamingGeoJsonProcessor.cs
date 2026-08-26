@@ -15,14 +15,21 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// digest: 5e2569cea31bf06736224b64215e0f8bf743332cf15f2b3f10d73b9b212de291
 /// updated: 2026-05-19
 /// </remarks>
-[DocState(Pass = 2, MTime = "2026-08-22T20:36:31Z", Digest = "ec6b0e56b414e0d88def3631b0599d4b8e5926f7f43037b56bc47d561860ce7e", Stale = false, Path = "raster/StreamingGeoJsonProcessor.cs", Since = "2026-08-22")]
+[Facets(Layer = "domain", Status = "active", Complexity = 4)]
+[Tags("code/streaming_parser", "code/elevation_enrichment")]
+[DocState(Pass = 2, MTime = "2026-08-26T09:15:50Z", Digest = "ec6b0e56b414e0d88def3631b0599d4b8e5926f7f43037b56bc47d561860ce7e", Stale = false, Path = "raster/StreamingGeoJsonProcessor.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Low-memory streaming processor that adds elevation Z coordinates to GeoJSON FeatureCollections  by reading and writing the JSON token-by-token without loading the entire document into memory.")]
+[Concept("geojson_elevation_enrichment")]
+[Concept("streaming_json_processing")]
 public static class StreamingGeoJsonProcessor {
 
 
 	/// <summary> Adds elevation Z coordinates to all GeoJSON files found under <paramref name="geoJsonPath"/> using the VRT at <paramref name="vrtPath"/>. </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 2)]
+	[Tags("code/file_traversal", "code/streaming_parser")]
 	[System.ComponentModel.Description("Adds elevation Z coordinates to all GeoJSON files found under geoJsonPath using the VRT at vrtPath.")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\SpocWeb\_Standards\Earth\Continent\Europe\Europe~Central\Germany\Germany~West\Hessen\counties~Hessen")]
+	[Concept("streaming_json_processing")]
 	public static void StreamGeoJsonProcessor(string vrtPath, string geoJsonPath) {
 		var gf = new GeometryFactory();
 		using var elevationModel = new GDalContext(vrtPath, new HistogramSchema());
@@ -32,8 +39,11 @@ public static class StreamingGeoJsonProcessor {
 	}
 
 	/// <summary> Verifies that a <see cref="GeometryFactory"/> can be constructed without exceptions. </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/diagnostics")]
 	[System.ComponentModel.Description("Verifies that a GeometryFactory can be constructed without exceptions.")]
 	[Test]
+	[Concept("streaming_json_processing")]
 	public static void TestGeometryFactory() {
 		try {
 			var gf = new GeometryFactory();
@@ -43,7 +53,10 @@ public static class StreamingGeoJsonProcessor {
 	}
 
 	/// <summary> Streams the GeoJSON at <paramref name="inputPath"/>, enriches each feature with elevation Z, and writes the result to <paramref name="outputPath"/>. </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 3)]
+	[Tags("code/streaming_parser", "code/elevation_enrichment")]
 	[System.ComponentModel.Description("Streams the GeoJSON at inputPath, enriches each feature with elevation Z, and writes the result to outputPath.")]
+	[Concept("streaming_json_processing")]
 	public static void ProcessFile(this GDalContext elevationModel, string inputPath, string outputPath) {
 		using var fs = File.OpenRead(inputPath);
 		var reader = new Utf8JsonReader(ReadAllBytes(fs), isFinalBlock: true, state: default);
@@ -73,7 +86,10 @@ public static class StreamingGeoJsonProcessor {
 	}
 
 	/// <summary> Adds the Z Dimension from the <paramref name="elevationModel"/> to the <paramref name="coordinates"/> </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 3)]
+	[Tags("code/streaming_parser", "code/elevation_enrichment")]
 	[System.ComponentModel.Description("Adds the Z Dimension from the elevationModel to the coordinates")]
+	[Concept("streaming_json_processing")]
 	public static void AddElevationAsZ(this GDalContext elevationModel, byte[] featureJson, Utf8JsonWriter writer) {
 		using var doc = JsonDocument.Parse(featureJson);
 		var root = doc.RootElement;
@@ -100,7 +116,10 @@ public static class StreamingGeoJsonProcessor {
 	}
 
 	/// <summary> Reads all bytes from <paramref name="stream"/> into a new array. </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
+	[Tags("code/stream_io")]
 	[System.ComponentModel.Description("Reads all bytes from stream into a new array.")]
+	[Concept("streaming_json_processing")]
 	private static byte[] ReadAllBytes(Stream stream) {
 		using var ms = new MemoryStream();
 		stream.CopyTo(ms);
@@ -109,7 +128,10 @@ public static class StreamingGeoJsonProcessor {
 
 	// Extract one JSON object (feature) without full parsing
 	/// <summary> Extracts the raw bytes of the next complete JSON object from <paramref name="reader"/> without fully parsing it. </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 2)]
+	[Tags("code/streaming_parser")]
 	[System.ComponentModel.Description("Extracts the raw bytes of the next complete JSON object from reader without fully parsing it.")]
+	[Concept("streaming_json_processing")]
 	private static byte[] ReadRawJson(ref Utf8JsonReader reader) {
 		using var ms = new MemoryStream();
 		using var writer = new Utf8JsonWriter(ms);
@@ -129,7 +151,10 @@ public static class StreamingGeoJsonProcessor {
 	}
 
 	/// <summary> Writes the current token from <paramref name="reader"/> to <paramref name="writer"/>. </summary>
+	[Facets(Layer = "domain", Status = "active", Complexity = 2)]
+	[Tags("code/streaming_parser")]
 	[System.ComponentModel.Description("Writes the current token from reader to writer.")]
+	[Concept("streaming_json_processing")]
 	static void WriteToken(this Utf8JsonWriter writer, ref Utf8JsonReader reader) {
 		switch (reader.TokenType) {
 			case JsonTokenType.StartObject:
