@@ -47,7 +47,6 @@
     <Compile Include="..\SpocWeb.Basics\Extensions\text\XString.cs" Link="_Links\XString.cs" />
     <Compile Include="..\SpocWeb.Minimal\files\XMdString.cs" Link="_Links\XMdString.cs" />
     <Compile Include="..\SpocWeb.Minimal\interfaces\maths\Statistics1D.cs" Link="_Links\Statistics1D.cs" />
-    <Compile Include="..\SpocWeb.Proxies\Attributes\RmgAttributes.cs" Link="_Links\RmgAttributes.cs" />
     <Compile Include="..\SpocWeb.Proxies\Attributes\RmgAttributes.IsExternalInit.cs" Link="_Links\RmgAttributes.IsExternalInit.cs" />
   </ItemGroup>
   <ItemGroup>
