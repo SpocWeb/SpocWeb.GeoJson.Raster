@@ -24,8 +24,8 @@ namespace org.SpocWeb.root.files.Tests.raster;
 [Tags("code/elevation_enrichment", "code/geojson_serialization")]
 [DocState(Pass = 2, MTime = "2026-08-26T09:15:49Z", Digest = "4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558", Stale = false, Path = "raster/GeoJsonAddElevation.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Adds elevation (Z) coordinates to every geometry in a GeoJSON file,  reading height values from a GDAL raster model such as a Copernicus DEM VRT.")]
-[Concept("geojson_elevation_enrichment")]
 [Concept("digital_elevation_model")]
+[Concept("Earth\\Geography\\GIS(Geographic_Information_System).md")]
 public static class GeoJsonAddElevation {
 	/// <summary>Specifies the constant geo Json Extension.</summary>
 	public const string GeoJsonExtension = ".geoJson";
@@ -50,7 +50,7 @@ public static class GeoJsonAddElevation {
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\Obsidian.SpocWeb\_Standards\Earth\Continent")]
-	[Concept("geojson_elevation_enrichment")]
+	[Concept("Earth\\Geography\\GIS(Geographic_Information_System).md")]
 	public static void AddElevationAsZ(string vrtElevationFile, string geoJsonDirectory) {//, int parallelism = 8) {
 		using var elevationModel = new GDalContext(vrtElevationFile, new HistogramSchema());
 		var dir = new DirectoryInfo(geoJsonDirectory);
@@ -117,7 +117,7 @@ public static class GeoJsonAddElevation {
 	[Facets(Layer = "domain", Status = "active", Complexity = 2)]
 	[Tags("code/elevation_enrichment", "code/geojson_serialization")]
 	[System.ComponentModel.Description("Adds elevation Z to the geometry of feature and returns the serialized GeoJSON Feature string.")]
-	[Concept("geojson_elevation_enrichment")]
+	[Concept("Earth\\Geography\\GIS(Geographic_Information_System).md")]
 	static string SerializeElevatedFeature(GDalContext elevationModel, JToken feature) {
 		var geometryElement = feature["geometry"];
 		var geomZ = geometryElement == null || geometryElement.Type == JTokenType.Null
@@ -137,7 +137,7 @@ public static class GeoJsonAddElevation {
 	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
 	[Tags("code/geojson_serialization")]
 	[System.ComponentModel.Description("Deserializes a GeoJSON string into a   instance using GeoJsonSerializer3D.")]
-	[Concept("geojson_elevation_enrichment")]
+	[Concept("Earth\\Geography\\GIS(Geographic_Information_System).md")]
 	public static T GeoJsonDeserialize<T>(string json) {
 		using TextReader sr = new StringReader(json);
 		return GeoJsonDeserialize<T>(sr);
@@ -162,7 +162,7 @@ public static class GeoJsonAddElevation {
 	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
 	[Tags("code/geojson_serialization")]
 	[System.ComponentModel.Description("Serializes geoJson to an indented GeoJSON string using GeoJsonSerializer3D.")]
-	[Concept("geojson_elevation_enrichment")]
+	[Concept("Earth\\Geography\\GIS(Geographic_Information_System).md")]
 	public static string GeoJsonSerialize(this Geometry geoJson, int indentation = 2, string newLine = "\n")
 		=> new StringBuilder().GeoJsonSerialize(geoJson, indentation, newLine).ToString();
 
@@ -194,7 +194,7 @@ public static class GeoJsonAddElevation {
 	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
 	[Tags("code/geojson_serialization")]
 	[System.ComponentModel.Description("Creates an indented JsonTextWriter wrapping sb.")]
-	[Concept("geojson_elevation_enrichment")]
+	[Concept("Earth\\Geography\\GIS(Geographic_Information_System).md")]
 	public static JsonTextWriter CreateJsonWriter(this TextWriter sb, int indentation = 2)
 		=> new JsonTextWriter(sb) {
 			Formatting = Formatting.Indented,

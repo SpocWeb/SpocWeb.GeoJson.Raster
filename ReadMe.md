@@ -1,12 +1,11 @@
 ---
+facet-complexity: 3
+facet-status: active
+facet-layer: domain
 concepts:
+  - Earth\Geography\GIS(Geographic_Information_System).md
   - digital_elevation_model
   - gdal_raster_processing
-  - geojson_elevation_enrichment
-facets:
-  layer: domain
-  status: active
-  complexity: 3
 tags:
   - code/elevation_enrichment
   - code/raster_processing

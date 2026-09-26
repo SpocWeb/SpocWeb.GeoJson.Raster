@@ -1,12 +1,11 @@
 ---
+facet-complexity: 3
+facet-status: active
+facet-layer: domain
 concepts:
+  - Mathematics\Statistics.md
   - digital_elevation_model
   - gdal_raster_processing
-  - histogram_computation
-facets:
-  layer: domain
-  status: active
-  complexity: 3
 tags:
   - code/elevation_enrichment
   - code/histogram_computation
