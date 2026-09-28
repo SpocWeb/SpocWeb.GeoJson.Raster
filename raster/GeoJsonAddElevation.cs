@@ -45,6 +45,7 @@ public static class GeoJsonAddElevation {
 	[Facets(Layer = "domain", Status = "active", Complexity = 2)]
 	[Tags("code/file_traversal", "code/elevation_enrichment")]
 	[System.ComponentModel.Description("Adds elevation data as Z coordinates to all GeoJSON files in the geoJsonDirectory and its subdirectories, using the vrtElevationFile model.")]
+	[Explicit("Writes to real local files; run manually and deliberately, never as part of a normal test pass.")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\SpocWeb\_Standards\Earth\Continent\")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]

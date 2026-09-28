@@ -28,6 +28,7 @@ public static class StreamingGeoJsonProcessor {
 	[Facets(Layer = "domain", Status = "active", Complexity = 2)]
 	[Tags("code/file_traversal", "code/streaming_parser")]
 	[System.ComponentModel.Description("Adds elevation Z coordinates to all GeoJSON files found under geoJsonPath using the VRT at vrtPath.")]
+	[Explicit("Writes to real local files; run manually and deliberately, never as part of a normal test pass.")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\SpocWeb\_Standards\Earth\Continent\Europe\Europe~Central\Germany\Germany~West\Hessen\counties~Hessen")]
 	[Concept("streaming_json_processing")]
 	public static void StreamGeoJsonProcessor(string vrtPath, string geoJsonPath) {

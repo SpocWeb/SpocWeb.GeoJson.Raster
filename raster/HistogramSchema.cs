@@ -304,6 +304,7 @@ public static class GeoJsonHistogramEnricher {
 	[Facets(Layer = "domain", Status = "active", Complexity = 3)]
 	[Tags("code/histogram_computation")]
 	[System.ComponentModel.Description("Uses an existing VRT and writes compact histograms into the output GeoJSON")]
+	[Explicit("Writes to real local files; run manually and deliberately, never as part of a normal test pass.")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Africa\Earth\Continent")]
 	[TestCase(@"D:\Copernicus_DSM\global_dem.vrt", @"D:\_Obsidian\_Standards.Asia\Earth\Continent")]
