@@ -90,7 +90,7 @@ public sealed class HistogramBin {
 /// </remarks>
 [Facets(Layer = "domain", Status = "active", Complexity = 1)]
 [Tags("code/data_model")]
-[DocState(Pass = 2, MTime = "2026-08-26T09:15:50Z", Digest = "b6829b271168e12fd0d71b100c611f873457f3bfa05b179b170d282a06153f1c", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-09-28T16:37:08Z", Digest = "2fb9909c6b548c28e2cb76d95f7f76b183248801a602bbba30d9e95a17351e23", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("shared histogram schema used by all features.")]
 [Concept("Mathematics\\Statistics.md")]
 public sealed class HistogramSchema {
