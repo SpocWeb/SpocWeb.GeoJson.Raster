@@ -33,7 +33,7 @@ public sealed class GDalContext : IDisposable {
 	/// updated: 2026-05-19
 	/// </remarks>
 	[Facets(Layer = "infrastructure", Status = "active", Complexity = 1)]
-	[Tags("code/constant_definition")]
+	[Tags("code/constant")]
 	[DocState(Pass = 2, MTime = "2026-09-29T01:10:06Z", Digest = "f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239", Stale = false, Path = "raster/GDalContext.cs", Since = "2026-08-22")]
 	[System.ComponentModel.Description("common EPSG coordinate reference system codes used by the application. Default: WGS 84 geographic coordinates in longitude and latitude.")]
 	[Concept("coordinate_reference_system")]
