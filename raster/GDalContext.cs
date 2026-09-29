@@ -17,7 +17,7 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// </remarks>
 [Facets(Layer = "infrastructure", Status = "active", Complexity = 2)]
 [Tags("code/context_management", "code/coordinate_transformation")]
-[DocState(Pass = 2, MTime = "2026-08-26T09:15:49Z", Digest = "b148f6976d8f56fe47232dc6cb3bba8c17bc765f7de78ceabb70fe784d1b51af", Stale = false, Path = "raster/GDalContext.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-09-28T23:30:47Z", Digest = "b148f6976d8f56fe47232dc6cb3bba8c17bc765f7de78ceabb70fe784d1b51af", Stale = false, Path = "raster/GDalContext.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Holds one worker-local GDAL and coordinate-transformation context for safe parallel processing.")]
 [Concept("gdal_raster_processing")]
 [Concept("coordinate_reference_system")]
@@ -34,8 +34,8 @@ public sealed class GDalContext : IDisposable {
 	/// </remarks>
 	[Facets(Layer = "infrastructure", Status = "active", Complexity = 1)]
 	[Tags("code/constant_definition")]
-	[DocState(Pass = 2, MTime = "2026-08-26T09:15:49Z", Digest = "f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239", Stale = false, Path = "raster/GDalContext.cs", Since = "2026-08-22")]
-	[System.ComponentModel.Description("common EPSG coordinate reference system codes used by the application.")]
+	[DocState(Pass = 2, MTime = "2026-09-28T23:30:47Z", Digest = "f992d79265e14a0b9021c0fb424ed6a92b8066cf71699a06012cf37d57fea239", Stale = false, Path = "raster/GDalContext.cs", Since = "2026-08-22")]
+	[System.ComponentModel.Description("common EPSG coordinate reference system codes used by the application. Default: WGS 84 geographic coordinates in longitude and latitude.")]
 	[Concept("coordinate_reference_system")]
 	public enum Epsg {
 		/// <summary>Represents wgs84.</summary>

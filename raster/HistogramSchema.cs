@@ -22,7 +22,7 @@ using System.ComponentModel;
 /// </remarks>
 [Facets(Layer = "domain", Status = "active", Complexity = 1)]
 [Tags("code/data_model")]
-[DocState(Pass = 2, MTime = "2026-08-26T09:15:50Z", Digest = "9bbda65e43164d84c53064634085f069774ae6079d0a0eec2db7b8eaab158e2a", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-09-28T23:30:47Z", Digest = "9bbda65e43164d84c53064634085f069774ae6079d0a0eec2db7b8eaab158e2a", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("(shared) histogram bin definition.")]
 [Concept("Mathematics\\Statistics.md")]
 public sealed class HistogramBin {
@@ -90,7 +90,7 @@ public sealed class HistogramBin {
 /// </remarks>
 [Facets(Layer = "domain", Status = "active", Complexity = 1)]
 [Tags("code/data_model")]
-[DocState(Pass = 2, MTime = "2026-09-28T16:37:08Z", Digest = "2fb9909c6b548c28e2cb76d95f7f76b183248801a602bbba30d9e95a17351e23", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-09-28T23:30:47Z", Digest = "2fb9909c6b548c28e2cb76d95f7f76b183248801a602bbba30d9e95a17351e23", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("shared histogram schema used by all features.")]
 [Concept("Mathematics\\Statistics.md")]
 public sealed class HistogramSchema {
@@ -105,7 +105,7 @@ public sealed class HistogramSchema {
 	/// <summary> measurement unit for bin values, e.g. meters. </summary>  
 	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
 	[Tags("code/data_model")]
-	[System.ComponentModel.Description("measurement unit for bin values, e.g.")]
+	[System.ComponentModel.Description("measurement unit for bin values, e.g. meters.")]
 	[Concept("Mathematics\\Statistics.md")]
 	public string Unit { get; set; }
 
@@ -176,7 +176,7 @@ public sealed class HistogramSchema {
 /// </remarks>
 [Facets(Layer = "domain", Status = "active", Complexity = 2)]
 [Tags("code/factory_method", "code/histogram_computation")]
-[DocState(Pass = 2, MTime = "2026-08-26T09:15:50Z", Digest = "bfe761ccdca398e6e43f2ecbdab9e10dd8f42136b479b23a086aaf33adcacfc7", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-09-28T23:30:47Z", Digest = "bfe761ccdca398e6e43f2ecbdab9e10dd8f42136b479b23a086aaf33adcacfc7", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Creates HistogramSchema definitions from an explicit bucket width or value range.")]
 [Concept("Mathematics\\Statistics.md")]
 public static class HistogramSchemaFactory {
@@ -285,7 +285,7 @@ public static class HistogramSchemaFactory {
 /// </remarks>
 [Facets(Layer = "domain", Status = "active", Complexity = 4)]
 [Tags("code/histogram_computation", "code/raster_processing", "code/parallel_processing")]
-[DocState(Pass = 2, MTime = "2026-08-26T09:15:50Z", Digest = "4ca284e0bb778ec17b33ab031b3d877c911a0ced1f6674ebda2f1ce23649c803", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-09-28T23:30:47Z", Digest = "4ca284e0bb778ec17b33ab031b3d877c911a0ced1f6674ebda2f1ce23649c803", Stale = false, Path = "raster/HistogramSchema.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Enriches GeoJSON polygon features with compact per-feature histograms derived from a Copernicus DEM VRT or tile directory.")]
 [Concept("Earth\\Geography\\GIS(Geographic_Information_System).md")]
 [Concept("gdal_raster_processing")]

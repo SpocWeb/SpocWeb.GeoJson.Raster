@@ -22,8 +22,8 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// </remarks>
 [Facets(Layer = "domain", Status = "active", Complexity = 3)]
 [Tags("code/elevation_enrichment", "code/geojson_serialization")]
-[DocState(Pass = 2, MTime = "2026-08-26T09:15:49Z", Digest = "4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558", Stale = false, Path = "raster/GeoJsonAddElevation.cs", Since = "2026-08-22")]
-[System.ComponentModel.Description("Adds elevation (Z) coordinates to every geometry in a GeoJSON file,  reading height values from a GDAL raster model such as a Copernicus DEM VRT.")]
+[DocState(Pass = 2, MTime = "2026-09-28T23:30:47Z", Digest = "4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558", Stale = false, Path = "raster/GeoJsonAddElevation.cs", Since = "2026-08-22")]
+[System.ComponentModel.Description("Adds elevation (Z) coordinates to every geometry in a GeoJSON file, reading height values from a GDAL raster model such as a Copernicus DEM VRT. Specifies the constant geo Json Extension.")]
 [Concept("digital_elevation_model")]
 [Concept("Earth\\Geography\\GIS(Geographic_Information_System).md")]
 public static class GeoJsonAddElevation {
@@ -137,7 +137,7 @@ public static class GeoJsonAddElevation {
 	/// <summary> Deserializes a GeoJSON string into a <typeparamref name="T"/> instance using <see cref="GeoJsonSerializer3D"/>. </summary>
 	[Facets(Layer = "domain", Status = "active", Complexity = 1)]
 	[Tags("code/geojson_serialization")]
-	[System.ComponentModel.Description("Deserializes a GeoJSON string into a   instance using GeoJsonSerializer3D.")]
+	[System.ComponentModel.Description("Deserializes a GeoJSON string into a instance using GeoJsonSerializer3D.")]
 	[Concept("Earth\\Geography\\GIS(Geographic_Information_System).md")]
 	public static T GeoJsonDeserialize<T>(string json) {
 		using TextReader sr = new StringReader(json);

@@ -10,7 +10,7 @@ tags:
   - code/elevation_enrichment
   - code/histogram_computation
   - code/raster_processing
-description: "GDAL-backed raster processing classes for elevation enrichment and histogram computation."
+description: "GDAL-backed raster processing classes for elevation enrichment and histogram computation. All classes reside in the `org.SpocWeb.root.files.Tests.raster` namespace."
 digest:
   local-classes:
     Epsg:
