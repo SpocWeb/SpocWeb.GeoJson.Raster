@@ -16,6 +16,9 @@ digest:
       mtime: "2026-08-03T19:24:45Z"
       digest: "e1623107bf1d964a526b588adc259035fbc65d746201544be5e5926fddd0dbb9"
   folders: {}
+related:
+  - path: ../_Matthias/Code/NET/_SpocWeb.Root/_std/SpocWeb.GeoJson.Raster/raster
+    shared-tags: [code/elevation_enrichment, code/raster_processing]
 ---
 # SpocWeb.GeoJson.Raster
 
