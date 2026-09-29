@@ -12,7 +12,7 @@ namespace org.SpocWeb.root.files.Tests;
 /// </remarks>
 [Facets(Layer = "infrastructure", Status = "active", Complexity = 1)]
 [Tags("code/entry_point")]
-[DocState(Pass = 2, MTime = "2026-09-28T23:30:47Z", Digest = "e1623107bf1d964a526b588adc259035fbc65d746201544be5e5926fddd0dbb9", Stale = false, Path = "Program.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-09-29T01:10:06Z", Digest = "e1623107bf1d964a526b588adc259035fbc65d746201544be5e5926fddd0dbb9", Stale = false, Path = "Program.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Entry point placeholder for the SpocWeb.GeoJson.Raster test project.")]
 [Concept("cli_entry_point")]
 public class Program

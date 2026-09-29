@@ -14,7 +14,7 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// </remarks>
 [Facets(Layer = "domain", Status = "active", Complexity = 2)]
 [Tags("code/geometry_transformation", "code/elevation_enrichment")]
-[DocState(Pass = 2, MTime = "2026-09-28T23:30:47Z", Digest = "614d471a784aba104c9923263832b3f0d34646572a31bf8e501e2fbf68cbb08d", Stale = false, Path = "raster/GeometryZ.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-09-29T01:10:06Z", Digest = "614d471a784aba104c9923263832b3f0d34646572a31bf8e501e2fbf68cbb08d", Stale = false, Path = "raster/GeometryZ.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Adds z-Component to a Geometry")]
 [Concept("digital_elevation_model")]
 [Concept("geometry_processing")]

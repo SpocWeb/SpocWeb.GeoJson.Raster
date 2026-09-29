@@ -22,7 +22,7 @@ namespace org.SpocWeb.root.files.Tests.raster;
 /// </remarks>
 [Facets(Layer = "domain", Status = "active", Complexity = 3)]
 [Tags("code/elevation_enrichment", "code/geojson_serialization")]
-[DocState(Pass = 2, MTime = "2026-09-28T23:30:47Z", Digest = "4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558", Stale = false, Path = "raster/GeoJsonAddElevation.cs", Since = "2026-08-22")]
+[DocState(Pass = 2, MTime = "2026-09-29T01:10:06Z", Digest = "4bb7bc989c0272f496c8ede21b555be18b4ddb57e4218598fd61080ae93a1558", Stale = false, Path = "raster/GeoJsonAddElevation.cs", Since = "2026-08-22")]
 [System.ComponentModel.Description("Adds elevation (Z) coordinates to every geometry in a GeoJSON file, reading height values from a GDAL raster model such as a Copernicus DEM VRT. Specifies the constant geo Json Extension.")]
 [Concept("digital_elevation_model")]
 [Concept("Earth\\Geography\\GIS(Geographic_Information_System).md")]
