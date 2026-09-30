@@ -44,6 +44,69 @@ digest:
 related:
   - path: ../_Matthias/Code/NET/_SpocWeb.Root/_std/SpocWeb.GeoJson.Raster
     shared-tags: [code/elevation_enrichment, code/raster_processing]
+dv_has_:
+  sub_:
+    folders: 0
+    files: 5
+    units: 9
+    facet_:
+      layer_:
+        domain: 7
+        infrastructure: 2
+      status_:
+        active: 9
+      complexity_:
+        "1": 3
+        "2": 3
+        "3": 1
+        "4": 2
+    tag_:
+      code_:
+        elevation_enrichment: 3
+        histogram_computation: 2
+        geojson_serialization: 1
+        raster_processing: 1
+        data_model: 2
+        context_management: 1
+        geometry_transformation: 1
+        coordinate_transformation: 1
+        streaming_parser: 1
+        parallel_processing: 1
+    concept_:
+      coordinate_reference_system: 2
+      "Earth\\Geography\\GIS(Geographic_Information_System).md": 3
+      digital_elevation_model: 2
+      gdal_raster_processing: 2
+      "Mathematics\\Statistics.md": 4
+      geometry_processing: 1
+      streaming_json_processing: 1
+has_sub_folders: 0
+has_sub_files: 5
+has_sub_units: 9
+has_sub_facet_layer_domain: 7
+has_sub_facet_layer_infrastructure: 2
+has_sub_facet_status_active: 9
+has_sub_facet_complexity_1: 3
+has_sub_facet_complexity_2: 3
+has_sub_facet_complexity_3: 1
+has_sub_facet_complexity_4: 2
+has_sub_tag_code_elevation_enrichment: 3
+has_sub_tag_code_histogram_computation: 2
+has_sub_tag_code_geojson_serialization: 1
+has_sub_tag_code_raster_processing: 1
+has_sub_tag_code_data_model: 2
+has_sub_tag_code_context_management: 1
+has_sub_tag_code_geometry_transformation: 1
+has_sub_tag_code_coordinate_transformation: 1
+has_sub_tag_code_streaming_parser: 1
+has_sub_tag_code_parallel_processing: 1
+has_sub_concept_coordinate_reference_system: 2
+has_sub_concept_earth_geography_gis_geographic_information_system_md: 3
+has_sub_concept_digital_elevation_model: 2
+has_sub_concept_gdal_raster_processing: 2
+has_sub_concept_mathematics_statistics_md: 4
+has_sub_concept_geometry_processing: 1
+has_sub_concept_streaming_json_processing: 1
 ---
 # raster
 

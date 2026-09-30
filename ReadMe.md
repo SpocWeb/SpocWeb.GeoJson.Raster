@@ -19,6 +19,71 @@ digest:
 related:
   - path: ../_Matthias/Code/NET/_SpocWeb.Root/_std/SpocWeb.GeoJson.Raster/raster
     shared-tags: [code/elevation_enrichment, code/raster_processing]
+dv_has_:
+  sub_:
+    folders: 1
+    files: 12
+    units: 11
+    facet_:
+      layer_:
+        domain: 8
+        infrastructure: 3
+      status_:
+        active: 11
+      complexity_:
+        "1": 4
+        "2": 3
+        "3": 2
+        "4": 2
+    tag_:
+      code_:
+        elevation_enrichment: 4
+        histogram_computation: 3
+        raster_processing: 2
+        geojson_serialization: 1
+        data_model: 2
+        context_management: 1
+        geometry_transformation: 1
+        coordinate_transformation: 1
+        streaming_parser: 1
+        parallel_processing: 1
+    concept_:
+      digital_elevation_model: 3
+      gdal_raster_processing: 3
+      coordinate_reference_system: 2
+      "Earth\\Geography\\GIS(Geographic_Information_System).md": 3
+      "Mathematics\\Statistics.md": 5
+      geometry_processing: 1
+      streaming_json_processing: 1
+      cli_entry_point: 1
+has_sub_folders: 1
+has_sub_files: 12
+has_sub_units: 11
+has_sub_facet_layer_domain: 8
+has_sub_facet_layer_infrastructure: 3
+has_sub_facet_status_active: 11
+has_sub_facet_complexity_1: 4
+has_sub_facet_complexity_2: 3
+has_sub_facet_complexity_3: 2
+has_sub_facet_complexity_4: 2
+has_sub_tag_code_elevation_enrichment: 4
+has_sub_tag_code_histogram_computation: 3
+has_sub_tag_code_raster_processing: 2
+has_sub_tag_code_geojson_serialization: 1
+has_sub_tag_code_data_model: 2
+has_sub_tag_code_context_management: 1
+has_sub_tag_code_geometry_transformation: 1
+has_sub_tag_code_coordinate_transformation: 1
+has_sub_tag_code_streaming_parser: 1
+has_sub_tag_code_parallel_processing: 1
+has_sub_concept_digital_elevation_model: 3
+has_sub_concept_gdal_raster_processing: 3
+has_sub_concept_coordinate_reference_system: 2
+has_sub_concept_earth_geography_gis_geographic_information_system_md: 3
+has_sub_concept_mathematics_statistics_md: 5
+has_sub_concept_geometry_processing: 1
+has_sub_concept_streaming_json_processing: 1
+has_sub_concept_cli_entry_point: 1
 ---
 # SpocWeb.GeoJson.Raster
 
