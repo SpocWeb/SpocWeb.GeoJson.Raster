@@ -73,7 +73,7 @@ dv_has_:
         streaming_parser: 1
         parallel_processing: 1
     concept_:
-      coordinate_reference_system: 2
+      "Mathematics\\Geometry\\Coordinate_System.md": 2
       "Earth\\Geography\\GIS(Geographic_Information_System).md": 3
       digital_elevation_model: 2
       gdal_raster_processing: 2
@@ -100,7 +100,7 @@ has_sub_tag_code_geometry_transformation: 1
 has_sub_tag_code_coordinate_transformation: 1
 has_sub_tag_code_streaming_parser: 1
 has_sub_tag_code_parallel_processing: 1
-has_sub_concept_coordinate_reference_system: 2
+has_sub_concept_mathematics_geometry_coordinate_system_md: 2
 has_sub_concept_earth_geography_gis_geographic_information_system_md: 3
 has_sub_concept_digital_elevation_model: 2
 has_sub_concept_gdal_raster_processing: 2

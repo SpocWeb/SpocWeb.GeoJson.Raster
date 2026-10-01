@@ -50,7 +50,7 @@ dv_has_:
     concept_:
       digital_elevation_model: 3
       gdal_raster_processing: 3
-      coordinate_reference_system: 2
+      "Mathematics\\Geometry\\Coordinate_System.md": 2
       "Earth\\Geography\\GIS(Geographic_Information_System).md": 3
       "Mathematics\\Statistics.md": 5
       geometry_processing: 1
@@ -78,7 +78,7 @@ has_sub_tag_code_streaming_parser: 1
 has_sub_tag_code_parallel_processing: 1
 has_sub_concept_digital_elevation_model: 3
 has_sub_concept_gdal_raster_processing: 3
-has_sub_concept_coordinate_reference_system: 2
+has_sub_concept_mathematics_geometry_coordinate_system_md: 2
 has_sub_concept_earth_geography_gis_geographic_information_system_md: 3
 has_sub_concept_mathematics_statistics_md: 5
 has_sub_concept_geometry_processing: 1
